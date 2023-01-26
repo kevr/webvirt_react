@@ -4,9 +4,7 @@ import { appRouter } from "./Routing";
 
 const Entry = () => {
   const router = appRouter();
-  return (
-    <RouterProvider router={router} />
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default Entry;

@@ -5,7 +5,7 @@ export const appRoutes = [
   {
     path: "/",
     element: <App />,
-  }
+  },
 ];
 
 export const appRouter = () => createBrowserRouter(appRoutes);
