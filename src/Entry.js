@@ -1,9 +1,11 @@
 /* Copyright 2023 Kevin Morris <kevr@0cost.org */
-import App from "./App";
+import { RouterProvider } from "react-router-dom";
+import { appRouter } from "./Routing";
 
 const Entry = () => {
+  const router = appRouter();
   return (
-    <App />
+    <RouterProvider router={router} />
   );
 };
 
