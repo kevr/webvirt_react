@@ -1,9 +1,13 @@
-import { SET_SESSION } from "./Actions";
+import { REMOVE_SESSION, SET_SESSION } from "./Actions";
 
-export const sessionReducer = (state = {}, action) => {
+const defaultState = {};
+
+export const sessionReducer = (state = defaultState, action) => {
   switch (action.type) {
     case SET_SESSION:
-      return Object.assign({}, state, action.session);
+      return Object.assign({}, state, action.session, { authenticated: true });
+    case REMOVE_SESSION:
+      return defaultState;
     default:
       return state;
   }
