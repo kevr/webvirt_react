@@ -1,12 +1,23 @@
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import Login from "../pages/Login";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Authenticated = ({ children }) => {
   const session = useSelector((state) => state.session);
   const authenticated = session.access;
 
+  const loc = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!authenticated) {
+      const next = encodeURIComponent(loc.pathname);
+      navigate(`/login?next=${next}`);
+    }
+  });
+
   if (!authenticated) {
-    return <Login />;
+    return <span />;
   }
 
   return <div className="content">{children}</div>;

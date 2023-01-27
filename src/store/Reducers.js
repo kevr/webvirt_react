@@ -1,8 +1,8 @@
-import { REMOVE_SESSION, SET_SESSION } from "./Actions";
+import { REMOVE_SESSION, SET_SESSION, SET_VIRT_DOMAINS } from "./Actions";
 
-const defaultState = {};
+const defaultSessionState = {};
 
-export const sessionReducer = (state = defaultState, action) => {
+export const sessionReducer = (state = defaultSessionState, action) => {
   switch (action.type) {
     case SET_SESSION:
       const updatedState = Object.assign({}, state, action.session, {
@@ -12,7 +12,18 @@ export const sessionReducer = (state = defaultState, action) => {
       return updatedState;
     case REMOVE_SESSION:
       localStorage.removeItem("session");
-      return defaultState;
+      return defaultSessionState;
+    default:
+      return state;
+  }
+};
+
+const defaultVirtState = {};
+
+export const virtReducer = (state = defaultVirtState, action) => {
+  switch (action.type) {
+    case SET_VIRT_DOMAINS:
+      return Object.assign({}, state, { domains: action.domains });
     default:
       return state;
   }

@@ -9,3 +9,10 @@ export const setSession = (session) => ({
   type: SET_SESSION,
   session: session,
 });
+
+export const SET_VIRT_DOMAINS = "SET_VIRT_DOMAINS";
+
+export const setVirtDomains = (domains) => ({
+  type: SET_VIRT_DOMAINS,
+  domains: domains,
+});

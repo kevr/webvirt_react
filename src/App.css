@@ -103,3 +103,19 @@ body {
   border-bottom: 1px solid #E57373 !important;
   box-shadow: 0 1px 0 0 #E57373 !important;
 }
+
+.domain.card {
+  width: 200px;
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.domain.card span {
+  text-overflow: ellipsis;
+}
+
+.react-tooltip {
+  z-index: 1;
+}

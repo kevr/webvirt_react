@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { setSession } from "../store/Actions";
 import { apiLogin } from "../API";
 
-const Login = () => {
+const Login = ({ next }) => {
   const [user, setUser] = useState("");
   const [pass, setPass] = useState("");
   const [progress, setProgress] = useState(false);
   const [error, setError] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -20,7 +22,11 @@ const Login = () => {
         // Dispatch received session object with an added user property
         console.log(json);
         dispatch(setSession(json));
-        setError(json.detail);
+        if (json.detail) {
+          setError(json.detail);
+        } else {
+          navigate(decodeURIComponent(next));
+        }
         setProgress(false);
       })
       .catch((error) => {

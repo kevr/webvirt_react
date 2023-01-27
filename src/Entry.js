@@ -4,6 +4,7 @@ import { RouterProvider } from "react-router-dom";
 import { createStore } from "./store";
 import { appRouter } from "./Routing";
 import "materialize-css/dist/css/materialize.css";
+import "react-tooltip/dist/react-tooltip.css";
 
 const Entry = () => {
   const router = appRouter();
