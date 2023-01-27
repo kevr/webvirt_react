@@ -3,6 +3,7 @@ import { Provider } from "react-redux";
 import { RouterProvider } from "react-router-dom";
 import { createStore } from "./store";
 import { appRouter } from "./Routing";
+import "materialize-css/dist/css/materialize.css";
 
 const Entry = () => {
   const router = appRouter();
