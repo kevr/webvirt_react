@@ -21,7 +21,6 @@ const Login = ({ next }) => {
     apiLogin(user, pass)
       .then((json) => {
         // Dispatch received session object with an added user property
-        console.log(json);
         dispatch(setSession(json));
         if (json.detail) {
           setError(json.detail);
