@@ -8,7 +8,8 @@ export const sessionReducer = (state = defaultState, action) => {
       const updatedState = Object.assign({}, state, action.session, {
         authenticated: true,
       });
-      localStorage.setItem("session", updatedState);
+      localStorage.setItem("session", JSON.stringify(updatedState));
+      return updatedState;
     case REMOVE_SESSION:
       localStorage.removeItem("session");
       return defaultState;

@@ -1,3 +1,15 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+}
+
 .App {
   text-align: center;
 }
@@ -35,4 +47,59 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.flex {
+  flex: 1 1 auto;
+}
+
+.flex-display {
+  display: flex;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-col {
+  flex-direction: column
+}
+
+.auth-component .user {
+  font-weight: bold;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.login-form-container {
+  width: 300px;
+}
+
+.btn {
+  transition: all 0.1s ease-in-out !important;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.indicator-container {
+  position: relative;
+  height: 40px;
+  padding: 20px 0px;
+}
+
+.indicator-container > .progress {
+  position: absolute;
+}
+
+.input-red:focus + label {
+  color: #E57373 !important;
+}
+
+.input-red:focus {
+  border-bottom: 1px solid #E57373 !important;
+  box-shadow: 0 1px 0 0 #E57373 !important;
 }

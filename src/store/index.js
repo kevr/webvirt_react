@@ -2,18 +2,17 @@ import { configureStore } from "@reduxjs/toolkit";
 import { sessionReducer } from "./Reducers";
 
 export const createStore = () => {
-  const localSession = localStorage.getItem("session") || {};
+  // Deduce initial states for each reducer
+  const localSession = localStorage.getItem("session");
+  const session = localSession ? JSON.parse(localSession) : {};
 
-  const initialState = {
-    session: localSession,
-  };
+  // Initial store state derived from localStorage
+  const initialState = { session };
 
-  return configureStore(
-    {
-      reducer: {
-        session: sessionReducer,
-      },
+  return configureStore({
+    reducer: {
+      session: sessionReducer,
     },
-    initialState
-  );
+    preloadedState: initialState,
+  });
 };
