@@ -3,9 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { apiRequest } from "../API";
 import { setVirtDomains } from "../store/Actions";
 import { Layout } from "../layouts";
-import Loader from "../components/Loader";
-import FlexCentered from "../components/FlexCentered";
-import DomainCard from "../components/DomainCard";
+import { DomainCard, FlexCentered, Loader } from "../components";
 
 const Dashboard = () => {
   const session = useSelector((state) => state.session);
@@ -39,13 +37,6 @@ const Dashboard = () => {
     }
   }, [session, dispatch]);
 
-  const sortByName = (a, b) => {
-    if (a.name < b.name) return -1;
-    else if (a.name > b.name) return 1;
-
-    return 0;
-  };
-
   const domains = JSON.parse(JSON.stringify(virt.domains || []));
   return (
     <Layout>
@@ -54,11 +45,9 @@ const Dashboard = () => {
           <FlexCentered>
             <div className="row">
               {domains.length &&
-                domains
-                  .sort(sortByName)
-                  .map((domain, idx) => (
-                    <DomainCard key={idx} uuid={idx} domain={domain} />
-                  ))}
+                domains.map((domain, idx) => (
+                  <DomainCard key={idx} uuid={idx} domain={domain} />
+                ))}
               {error && (
                 <div className="red-text text-lighten-1 text-center">
                   <div>

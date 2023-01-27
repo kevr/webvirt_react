@@ -111,3 +111,13 @@ body {
 .react-tooltip {
   z-index: 1;
 }
+
+.domain.card {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.domain.card:hover {
+  opacity: 0.7;
+}
+

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Tooltip } from "react-tooltip";
 
 const STATE_COLORS = {
@@ -27,20 +28,22 @@ const DomainCard = ({ domain, uuid }) => {
   const cardColor = STATE_CARD_COLORS[domain.state.string];
   return (
     <div className="col s6 m4">
-      <div className={`card ${cardColor}`}>
-        <div
-          id={`domain-tooltip-${uuid}`}
-          data-tooltip-content={`${domain.name}: ${domain.state.string}`}
-        >
-          <div className="card-content">
-            <span className="card-title">{domain.name}</span>
-            <p>
-              State: <span className={color}>{domain.state.string}</span>
-            </p>
+      <Link to={`/domains/${uuid}`}>
+        <div className={`domain card ${cardColor}`}>
+          <div
+            id={`domain-tooltip-${uuid}`}
+            data-tooltip-content={`${domain.name}: ${domain.state.string}`}
+          >
+            <div className="card-content grey-text text-darken-4">
+              <span className="card-title">{domain.name}</span>
+              <p>
+                State: <span className={color}>{domain.state.string}</span>
+              </p>
+            </div>
           </div>
         </div>
-        <Tooltip anchorId={`domain-tooltip-${uuid}`} place="bottom" />
-      </div>
+      </Link>
+      <Tooltip anchorId={`domain-tooltip-${uuid}`} place="bottom" />
     </div>
   );
 };

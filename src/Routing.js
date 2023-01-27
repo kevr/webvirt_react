@@ -1,5 +1,6 @@
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
+import Domain from "./pages/Domain";
 import { createBrowserRouter } from "react-router-dom";
 
 export const appRoutes = [
@@ -10,6 +11,10 @@ export const appRoutes = [
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/domains/:index",
+    element: <Domain />,
   },
 ];
 

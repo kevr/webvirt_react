@@ -20,10 +20,18 @@ export const sessionReducer = (state = defaultSessionState, action) => {
 
 const defaultVirtState = {};
 
+const sortByName = (a, b) => {
+  if (a.name < b.name) return -1;
+  else if (a.name > b.name) return 1;
+  return 0;
+};
+
 export const virtReducer = (state = defaultVirtState, action) => {
   switch (action.type) {
     case SET_VIRT_DOMAINS:
-      return Object.assign({}, state, { domains: action.domains });
+      const domains = JSON.parse(JSON.stringify(action.domains));
+      domains.sort(sortByName);
+      return Object.assign({}, state, { domains: domains });
     default:
       return state;
   }
