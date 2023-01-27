@@ -9,7 +9,7 @@ import FlexCentered from "../components/FlexCentered";
 
 const Dashboard = () => {
   const session = useSelector((state) => state.session);
-  const domains = useSelector((state) => state.virt.domains);
+  const virt = useSelector((state) => state.virt);
   const dispatch = useDispatch();
   const apiLock = useRef(false);
 
@@ -46,13 +46,14 @@ const Dashboard = () => {
     return 0;
   };
 
+  const domains = JSON.parse(JSON.stringify(virt.domains || []));
   return (
     <Layout>
       <div className="domains container flex flex-display flex-col">
         <Loader label="Loading domains..." loading={loading}>
           <FlexCentered>
             <div className="row">
-              {domains &&
+              {domains.length &&
                 domains.sort(sortByName).map((domain, idx) => (
                   <div key={idx} className="col domain card">
                     <div
