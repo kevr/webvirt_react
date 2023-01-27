@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Tooltip } from "react-tooltip";
 import { apiRequest } from "../API";
 import { setVirtDomains } from "../store/Actions";
 import { Layout } from "../layouts";
