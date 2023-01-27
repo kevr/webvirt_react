@@ -6,6 +6,7 @@ import { setVirtDomains } from "../store/Actions";
 import { Layout } from "../layouts";
 import Loader from "../components/Loader";
 import FlexCentered from "../components/FlexCentered";
+import DomainCard from "../components/DomainCard";
 
 const Dashboard = () => {
   const session = useSelector((state) => state.session);
@@ -54,23 +55,11 @@ const Dashboard = () => {
           <FlexCentered>
             <div className="row">
               {domains.length &&
-                domains.sort(sortByName).map((domain, idx) => (
-                  <div key={idx} className="col domain card">
-                    <div
-                      id={`domain-tooltip-${idx}`}
-                      data-tooltip-content={`${domain.name}: ${domain.state.string}`}
-                    >
-                      <div className="card-content">
-                        <span className="card-title">{domain.name}</span>
-                        <p>State: {domain.state.string}</p>
-                      </div>
-                    </div>
-                    <Tooltip
-                      anchorId={`domain-tooltip-${idx}`}
-                      place="bottom"
-                    />
-                  </div>
-                ))}
+                domains
+                  .sort(sortByName)
+                  .map((domain, idx) => (
+                    <DomainCard key={idx} uuid={idx} domain={domain} />
+                  ))}
               {error && (
                 <div className="red-text text-lighten-1 text-center">
                   <div>
