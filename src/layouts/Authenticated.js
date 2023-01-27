@@ -20,7 +20,7 @@ const Authenticated = ({ children }) => {
     return <span />;
   }
 
-  return <div className="content">{children}</div>;
+  return <div className="flex flex-display flex-col">{children}</div>;
 };
 
 export default Authenticated;

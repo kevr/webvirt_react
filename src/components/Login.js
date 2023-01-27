@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setSession } from "../store/Actions";
 import { apiLogin } from "../API";
+import Loader from "./Loader";
 
 const Login = ({ next }) => {
   const [user, setUser] = useState("");
@@ -71,15 +72,11 @@ const Login = ({ next }) => {
         </button>
       </div>
       <div className="text-center indicator-container">
-        {progress ? (
-          <div className="progress red lighten-3">
-            <div className="indeterminate red lighten-1"></div>
-          </div>
-        ) : (
+        <Loader loading={progress}>
           <div className="error text-center">
             {error && <span className="red-text lighten-2">{error}</span>}
           </div>
-        )}
+        </Loader>
       </div>
     </form>
   );
