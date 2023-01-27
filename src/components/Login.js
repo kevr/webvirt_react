@@ -67,7 +67,11 @@ const Login = ({ next }) => {
         <label htmlFor="login-password">Password</label>
       </div>
       <div className="text-center">
-        <button type="submit" className="waves-effect red lighten-2 btn">
+        <button
+          type="submit"
+          className="waves-effect red lighten-2 btn"
+          disabled={progress}
+        >
           {"Login"}
         </button>
       </div>
