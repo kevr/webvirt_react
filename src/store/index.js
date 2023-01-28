@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { sessionReducer, virtReducer } from "./Reducers";
+import { appReducer, sessionReducer, virtReducer } from "./Reducers";
 
 export const createStore = () => {
   // Deduce initial states for each reducer
@@ -14,6 +14,7 @@ export const createStore = () => {
 
   return configureStore({
     reducer: {
+      app: appReducer,
       session: sessionReducer,
       virt: virtReducer,
     },

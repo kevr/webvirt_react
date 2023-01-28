@@ -1,4 +1,10 @@
-import { REMOVE_SESSION, SET_SESSION, SET_VIRT_DOMAINS } from "./Actions";
+import {
+  REMOVE_APP_TITLE,
+  REMOVE_SESSION,
+  SET_APP_TITLE,
+  SET_SESSION,
+  SET_VIRT_DOMAINS,
+} from "./Actions";
 import { sortByName } from "../Util";
 
 const defaultSessionState = {};
@@ -30,6 +36,21 @@ export const virtReducer = (state = defaultVirtState, action) => {
         object[domain.name] = domain;
       });
       return Object.assign({}, state, { domains: object });
+    default:
+      return state;
+  }
+};
+
+const defaultAppState = {
+  title: "webvirt",
+};
+
+export const appReducer = (state = defaultAppState, action) => {
+  switch (action.type) {
+    case SET_APP_TITLE:
+      return Object.assign({}, state, { title: action.title });
+    case REMOVE_APP_TITLE:
+      return defaultAppState;
     default:
       return state;
   }

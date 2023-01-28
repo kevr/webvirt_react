@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { apiRequest } from "../API";
-import { setVirtDomains, removeSession } from "../store/Actions";
+import { setVirtDomains, removeSession, setAppTitle } from "../store/Actions";
 import { Layout } from "../layouts";
 import { DomainCard, FlexCentered, Loader } from "../components";
 import { navigateLogin, sortByName } from "../Util";
@@ -20,6 +20,8 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    dispatch(setAppTitle("Dashboard"));
+
     // If we have a valid session and we haven't queried yet
     if (session.access && !apiLock.current) {
       apiLock.current = true;
