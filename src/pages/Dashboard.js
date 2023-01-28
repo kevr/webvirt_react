@@ -1,15 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import { apiRequest } from "../API";
-import { setVirtDomains } from "../store/Actions";
+import { setVirtDomains, removeSession } from "../store/Actions";
 import { Layout } from "../layouts";
 import { DomainCard, FlexCentered, Loader } from "../components";
+import { navigateLogin, sortByName } from "../Util";
 
 const Dashboard = () => {
   const session = useSelector((state) => state.session);
   const virt = useSelector((state) => state.virt);
   const dispatch = useDispatch();
   const apiLock = useRef(false);
+
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -27,7 +32,13 @@ const Dashboard = () => {
           } else {
             setError(json.detail);
           }
+
           setLoading(false);
+
+          if (json.status === 401) {
+            dispatch(removeSession());
+            navigateLogin(location, navigate);
+          }
         })
         .catch((error) => {
           console.error(error.message);
@@ -35,19 +46,21 @@ const Dashboard = () => {
           setLoading(false);
         });
     }
-  }, [session, dispatch]);
+  }, [session, dispatch, location, navigate]);
 
-  const domains = JSON.parse(JSON.stringify(virt.domains || []));
+  const domains = JSON.parse(JSON.stringify(virt.domains || {}));
   return (
     <Layout>
       <div className="domains container flex flex-display flex-col">
         <Loader label="Loading domains..." loading={loading}>
           <FlexCentered>
             <div className="row">
-              {domains.length &&
-                domains.map((domain, idx) => (
-                  <DomainCard key={idx} uuid={idx} domain={domain} />
-                ))}
+              {Object.keys(domains).length > 0 &&
+                Object.values(domains)
+                  .sort(sortByName)
+                  .map((domain, idx) => (
+                    <DomainCard key={idx} uuid={idx} domain={domain} />
+                  ))}
               {error && (
                 <div className="red-text text-lighten-1 text-center">
                   <div>

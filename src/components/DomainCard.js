@@ -28,21 +28,19 @@ const DomainCard = ({ domain, uuid }) => {
   const cardColor = STATE_CARD_COLORS[domain.state.string];
   return (
     <div className="col s6 m4">
-      <Link to={`/domains/${uuid}`}>
-        <div className={`domain card ${cardColor}`}>
-          <div
-            id={`domain-tooltip-${uuid}`}
-            data-tooltip-content={`${domain.name}: ${domain.state.string}`}
-          >
-            <div className="card-content grey-text text-darken-4">
-              <span className="card-title">{domain.name}</span>
-              <p>
-                State: <span className={color}>{domain.state.string}</span>
-              </p>
-            </div>
+      <div className={`domain card ${cardColor}`}>
+        <div
+          id={`domain-tooltip-${uuid}`}
+          data-tooltip-content={`${domain.name}: ${domain.state.string}`}
+        >
+          <div className="card-content grey-text text-darken-4">
+            <span className="card-title">{domain.name}</span>
+            <p>
+              State: <span className={color}>{domain.state.string}</span>
+            </p>
           </div>
         </div>
-      </Link>
+      </div>
       <Tooltip anchorId={`domain-tooltip-${uuid}`} place="bottom" />
     </div>
   );

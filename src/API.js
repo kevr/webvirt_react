@@ -27,7 +27,11 @@ export const apiRequest = (
     options.body = JSON.stringify(data);
   }
 
-  return fetch(endpoint_, options).then((response) => response.json());
+  return fetch(endpoint_, options).then(async (response) => {
+    const data = await response.json();
+    data["status"] = response.status;
+    return Promise.resolve(data);
+  });
 };
 
 export const apiRefresh = (token) => {
