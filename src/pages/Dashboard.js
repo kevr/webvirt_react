@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { apiRequest } from "../API";
 import { setVirtDomains, removeSession, setAppTitle } from "../store/Actions";
 import { Layout } from "../layouts";
-import { DomainCard, FlexCentered, Loader } from "../components";
+import { DomainCard, Error, FlexCentered, Loader } from "../components";
 import { navigateLogin, sortByName } from "../Util";
 
 const Dashboard = () => {
@@ -54,7 +54,7 @@ const Dashboard = () => {
   return (
     <Layout>
       <div className="domains container flex flex-display flex-col">
-        <Loader label="Loading domains..." loading={loading}>
+        <Loader label="Fetching domains..." loading={loading}>
           <FlexCentered>
             <div className="row">
               {Object.keys(domains).length > 0 &&
@@ -63,14 +63,7 @@ const Dashboard = () => {
                   .map((domain, idx) => (
                     <DomainCard key={idx} uuid={idx} domain={domain} />
                   ))}
-              {error && (
-                <div className="red-text text-lighten-1 text-center">
-                  <div>
-                    <i className="material-icons medium">error</i>
-                  </div>
-                  <div className="error">{error}</div>
-                </div>
-              )}
+              <Error error={error} />
             </div>
           </FlexCentered>
         </Loader>

@@ -13,7 +13,7 @@ export const appRoutes = [
     element: <Login />,
   },
   {
-    path: "/domains/:index",
+    path: "/domains/:name",
     element: <Domain />,
   },
 ];
