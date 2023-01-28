@@ -3,9 +3,9 @@ import {
   REMOVE_SESSION,
   SET_APP_TITLE,
   SET_SESSION,
+  SET_VIRT_DOMAIN,
   SET_VIRT_DOMAINS,
 } from "./Actions";
-import { sortByName } from "../Util";
 
 const defaultSessionState = {};
 
@@ -29,6 +29,12 @@ const defaultVirtState = {};
 
 export const virtReducer = (state = defaultVirtState, action) => {
   switch (action.type) {
+    case SET_VIRT_DOMAIN:
+      return Object.assign({}, state, {
+        domains: {
+          [action.domain.name]: action.domain,
+        },
+      });
     case SET_VIRT_DOMAINS:
       const domains = JSON.parse(JSON.stringify(action.domains));
       const object = {};
