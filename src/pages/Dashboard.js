@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useQuery } from "react-query";
 import { apiRequest } from "../API";
 import { setVirtDomains, removeSession, setAppTitle } from "../store/Actions";
 import { Layout } from "../layouts";
@@ -11,50 +12,34 @@ const Dashboard = () => {
   const session = useSelector((state) => state.session);
   const virt = useSelector((state) => state.virt);
   const dispatch = useDispatch();
-  const apiLock = useRef(false);
 
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { isLoading, isError, error, data } = useQuery(
+    "domains",
+    () => apiRequest("domains", "get", session),
+    { retry: 0 }
+  );
 
   useEffect(() => {
     dispatch(setAppTitle("Dashboard"));
 
-    // If we have a valid session and we haven't queried yet
-    if (session.access && !apiLock.current) {
-      apiLock.current = true;
-
-      apiRequest("domains", "get", session)
-        .then((json) => {
-          if (!json.detail) {
-            dispatch(setVirtDomains(json));
-            setError(false);
-          } else {
-            setError(json.detail);
-          }
-
-          setLoading(false);
-
-          if (json.status === 401) {
-            dispatch(removeSession());
-            navigateLogin(location, navigate);
-          }
-        })
-        .catch((error) => {
-          console.error(error.message);
-          setError(error.message);
-          setLoading(false);
-        });
+    if (!isLoading) {
+      if (!isError) {
+        dispatch(setVirtDomains(data));
+      } else {
+        dispatch(removeSession());
+        navigateLogin(location, navigate);
+      }
     }
-  }, [session, dispatch, location, navigate]);
+  }, [data, isError, isLoading, session, dispatch, location, navigate]);
 
   const domains = JSON.parse(JSON.stringify(virt.domains || {}));
   return (
     <Layout>
       <div className="domains container flex flex-display flex-col">
-        <Loader label="Fetching domains..." loading={loading}>
+        <Loader label="Fetching domains..." loading={isLoading}>
           <FlexCentered>
             <div className="row">
               {Object.keys(domains).length > 0 &&
@@ -63,7 +48,7 @@ const Dashboard = () => {
                   .map((domain, idx) => (
                     <DomainCard key={idx} uuid={idx} domain={domain} />
                   ))}
-              <Error error={error} />
+              <Error enabled={!isLoading && isError} error={error} />
             </div>
           </FlexCentered>
         </Loader>

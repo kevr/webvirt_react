@@ -27,11 +27,29 @@ export const apiRequest = (
     options.body = JSON.stringify(data);
   }
 
-  return fetch(endpoint_, options).then(async (response) => {
-    const data = await response.json();
-    data["status"] = response.status;
-    return Promise.resolve(data);
-  });
+  return fetch(endpoint_, options)
+    .then(async (response) => {
+      const data = await response.json();
+
+      if (response.status !== 200) {
+        return Promise.reject({
+          status: response.status,
+          data: data,
+        });
+      }
+
+      return Promise.resolve(data);
+    })
+    .catch((error) => {
+      if (error.data) {
+        return Promise.reject(error);
+      } else {
+        return Promise.reject({
+          status: 500,
+          data: { detail: "Unable to contact API" },
+        });
+      }
+    });
 };
 
 export const apiRefresh = (token) => {

@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "react-query";
 import { Layout } from "../layouts";
 import { FlexCentered, Loader } from "../components";
 import { apiRequest } from "../API";
@@ -15,23 +16,24 @@ const Domain = () => {
 
   const hasDomain = domains.hasOwnProperty(name);
   const hasDomainInfo = hasDomain && domains[name].info !== undefined;
-  const [infoLoading, setInfoLoading] = useState(true);
+
+  const { isLoading, isError, data } = useQuery(
+    ["domain", name],
+    () => apiRequest(`domains/${name}`, "get", session),
+    { retry: 0 }
+  );
 
   useEffect(() => {
     dispatch(setAppTitle(`Domain: ${name}`));
 
-    if (!hasDomainInfo) {
-      apiRequest(`domains/${name}`, "get", session).then((json) => {
-        if (!json.detail) {
-          dispatch(setVirtDomain(json));
-          setInfoLoading(false);
-        } else {
-          console.error(json.detail);
-          navigate("/");
-        }
-      });
+    if (!isLoading) {
+      if (!isError) {
+        dispatch(setVirtDomain(data));
+      } else {
+        navigate("/");
+      }
     }
-  }, [dispatch, hasDomainInfo, name, navigate, session]);
+  }, [isLoading, data, isError, dispatch, name, navigate, session]);
 
   const label = hasDomain ? <h2>{domains[name].name}</h2> : <span />;
 
@@ -77,7 +79,7 @@ const Domain = () => {
       <div className="container">
         {Object.keys(domains).length > 0 && label}
         <FlexCentered>
-          <Loader label={`Fetching details...`} loading={infoLoading}>
+          <Loader label={`Fetching details...`} loading={isLoading}>
             {state}
             {info}
           </Loader>

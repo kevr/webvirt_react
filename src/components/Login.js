@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { setSession } from "../store/Actions";
 import { apiLogin } from "../API";
 import Loader from "./Loader";
+import Error from "./Error";
 
 const Login = ({ next }) => {
   const [user, setUser] = useState("");
@@ -22,15 +23,10 @@ const Login = ({ next }) => {
       .then((json) => {
         // Dispatch received session object with an added user property
         dispatch(setSession(json));
-        if (json.detail) {
-          setError(json.detail);
-        } else {
-          navigate(decodeURIComponent(next));
-        }
-        setProgress(false);
+        navigate(decodeURIComponent(next));
       })
       .catch((error) => {
-        console.error(error);
+        setError(error);
         setProgress(false);
       });
   };
@@ -77,7 +73,7 @@ const Login = ({ next }) => {
       <div className="text-center indicator-container">
         <Loader loading={progress}>
           <div className="error text-center">
-            {error && <span className="red-text lighten-2">{error}</span>}
+            <Error inline={true} enabled={!progress && error} error={error} />
           </div>
         </Loader>
       </div>
