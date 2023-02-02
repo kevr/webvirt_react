@@ -130,3 +130,39 @@ test("Login page navigates to / on login", async () => {
 
   expect(router.state.location.pathname).toBe("/");
 });
+
+test("Login gracefully fails", async () => {
+  const router = createMemoryRouter(appRoutes, {
+    initialEntries: ["/login?next=%2F"],
+  });
+
+  const store = createStore();
+  await act(async () =>
+    render(
+      <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+          <HelmetProvider>
+            <RouterProvider router={router} />
+          </HelmetProvider>
+        </QueryClientProvider>
+      </Provider>
+    )
+  );
+
+  fetch.mockReturnValueOnce(
+    Promise.resolve({
+      status: 401,
+    })
+  );
+
+  const submitButton = screen.getByTestId("login-submit");
+  expect(submitButton).toBeInTheDocument();
+
+  await act(async () => {
+    await fireEvent.click(submitButton);
+  });
+
+  expect(router.state.location.pathname).toBe("/login");
+  const error = screen.getByTestId("error");
+  expect(error).toBeInTheDocument();
+});
