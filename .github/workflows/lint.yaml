@@ -1,0 +1,15 @@
+name: lint
+
+on: [push]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run Javascript license checks
+        run: bash scripts/check-license.sh . js
+
+      - name: Run CSS license checks
+        run: bash scripts/check-license.sh . css
