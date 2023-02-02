@@ -1,4 +1,5 @@
 import Session from "./Session";
+import SessionReducer from "./SessionRefresher";
 
 const Navbar = () => {
   return (
@@ -7,7 +8,9 @@ const Navbar = () => {
         <div className="container flex-display flex-row">
           <div className="flex"></div>
           <div className="auth-component-wrapper">
-            <Session />
+            <SessionReducer>
+              <Session />
+            </SessionReducer>
           </div>
         </div>
       </div>
