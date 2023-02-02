@@ -1,12 +1,26 @@
+import PropTypes from "prop-types";
 import FlexCentered from "./FlexCentered";
 
-const Loader = ({ label, loading, children }) => {
+const getLoaderByType = (type) => {
+  switch (type) {
+    default:
+      return (
+        <div className="progress red lighten-3" style={{ width: "100px" }}>
+          <div className="indeterminate red lighten-1"></div>
+        </div>
+      );
+  }
+};
+
+const Loader = ({ type, label, loading, children }) => {
+  const loader = getLoaderByType(type);
+
   if (loading) {
     return (
       <FlexCentered>
-        <p className="text-center">{label}</p>
-        <div className="progress red lighten-3" style={{ width: "150px" }}>
-          <div className="indeterminate red lighten-1"></div>
+        <div>
+          <p className="text-center">{label}</p>
+          {loader}
         </div>
       </FlexCentered>
     );
@@ -18,6 +32,13 @@ const Loader = ({ label, loading, children }) => {
 Loader.defaultProps = {
   loading: true,
   label: "",
+  type: "progress",
+};
+
+Loader.requiredProps = {
+  loading: PropTypes.bool.isRequired,
+  label: PropTypes.string,
+  type: PropTypes.string,
 };
 
 export default Loader;
