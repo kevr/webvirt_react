@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
 # implied. See the License for the specific language governing
 # permissions and limitations under the License.
-sources=$(find "$1" -type d -name 'node_modules' -prune -o -name "*.${2}" | grep -v node_modules | xargs)
+sources=$(find "$1" -type d -name 'node_modules' -prune -o -name "*.${2}" | grep -v node_modules | grep -v '/coverage/' | xargs)
 
 read -r -d '' license_comment << EOF
 /\*_\
