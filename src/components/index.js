@@ -1,3 +1,4 @@
+import Card from "./Card";
 import DomainCard from "./DomainCard";
 import Error from "./Error";
 import FlexCentered from "./FlexCentered";
@@ -9,6 +10,7 @@ import SessionRefresher from "./SessionRefresher";
 import StateControl from "./StateControl";
 
 export {
+  Card,
   DomainCard,
   Error,
   FlexCentered,
@@ -21,6 +23,7 @@ export {
 };
 
 const exports = {
+  Card,
   DomainCard,
   Error,
   FlexCentered,
