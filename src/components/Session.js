@@ -15,7 +15,7 @@ const Session = ({ children }) => {
     };
 
     M.Dropdown.init(elements, options);
-  });
+  }, [session, dispatch]);
 
   const onLogout = (event) => {
     event.preventDefault();
