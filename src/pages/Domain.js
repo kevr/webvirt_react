@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { Layout } from "../layouts";
-import { FlexCentered, Loader, StateControl } from "../components";
+import { Card, FlexCentered, Loader, StateControl } from "../components";
 import { apiRequest } from "../API";
 import { setAppTitle, setVirtDomain } from "../store/Actions";
 
@@ -38,100 +38,93 @@ const Domain = () => {
   }, [isLoading, data, isError, dispatch, name, navigate, session]);
 
   const state = hasDomain ? (
-    <div className="card">
-      <div className="card-content">
-        <span className="card-title">Overview</span>
-        <table className="machine-state">
-          <tbody>
-            <tr>
-              <td className="text-right">{"Name"}</td>
-              <td className="overflow-ellipsis">{domain.name}</td>
-            </tr>
-            <tr>
-              <td className="text-right">{"State"}</td>
-              <td>{domain.state.string}</td>
-            </tr>
-          </tbody>
-        </table>
-        <StateControl domain={domain} />
-      </div>
-    </div>
+    <Card title="Overview" style={{ height: "231px" }}>
+      <table className="machine-state">
+        <tbody>
+          <tr>
+            <th className="text-right">{"Name"}</th>
+            <td className="overflow-ellipsis">{domain.name}</td>
+          </tr>
+          <tr>
+            <th className="text-right">{"State"}</th>
+            <td>{domain.state.string}</td>
+          </tr>
+        </tbody>
+      </table>
+      <StateControl domain={domain} />
+    </Card>
   ) : (
     <span />
   );
 
   const info = hasDomainInfo ? (
-    <div className="card">
-      <div className="card-content">
-        <span className="card-title">Resources</span>
-        <table>
-          <tbody>
-            <tr>
-              <td>{"CPUs"}</td>
-              <td>{domain.info.cpus}</td>
-            </tr>
-            <tr>
-              <td>{"Memory (max)"}</td>
-              <td>{domain.info.maxMemory / 1024} MB</td>
-            </tr>
-            <tr>
-              <td>{"Memory (allocated)"}</td>
-              <td>{domain.info.memory / 1024} MB</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <Card title="Resources" style={{ height: "231px" }}>
+      <table>
+        <tbody>
+          <tr>
+            <th>{"CPUs"}</th>
+            <th>{"Memory (used)"}</th>
+            <th>{"Memory (total)"}</th>
+          </tr>
+          <tr>
+            <td>{domain.info.cpus}</td>
+            <td>{domain.info.memory / 1024} MB</td>
+            <td>{domain.info.maxMemory / 1024} MB</td>
+          </tr>
+        </tbody>
+      </table>
+    </Card>
   ) : (
     <span />
   );
 
   const interfaces = hasDomainInfo ? (
-    <div className="card">
-      <div className="card-content">
-        <span className="card-title">Network Interfaces</span>
-        <ul>
+    <Card title="Network Interfaces">
+      <table>
+        <thead>
+          <tr>
+            <th>{"Name"}</th>
+            <th>{"Model"}</th>
+            <th>{"Mac"}</th>
+          </tr>
+        </thead>
+
+        <tbody>
           {domain.info.devices.interfaces.map((iface, index) => (
-            <li key={index}>
-              <p>
-                <span>
-                  {iface.name} ({iface.model})
-                </span>
-                <span className="right">{iface.macAddress}</span>
-              </p>
-            </li>
+            <tr key={index}>
+              <td>{iface.name}</td>
+              <td>{iface.model}</td>
+              <td>{iface.macAddress}</td>
+            </tr>
           ))}
-        </ul>
-      </div>
-    </div>
+        </tbody>
+      </table>
+    </Card>
   ) : (
     <span />
   );
 
   const disks = hasDomainInfo ? (
-    <div className="card">
-      <div className="card-content">
-        <span className="card-title">Disks</span>
-        <table>
-          <thead>
-            <tr>
-              <th>{"Target"}</th>
-              <th>{"Source"}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {domain.info.devices.disks
-              .filter((disk) => disk.device === "disk")
-              .map((disk, index) => (
-                <tr key={index}>
-                  <td>/dev/{disk.target.dev}</td>
-                  <td>{disk.source.file.split("/").reverse()[0]}</td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <Card title="Disks">
+      <table>
+        <thead>
+          <tr>
+            <th>{"Target"}</th>
+            <th>{"Source"}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {domain.info.devices.disks
+            .filter((disk) => disk.device === "disk")
+            .map((disk, index) => (
+              <tr key={index}>
+                <td>/dev/{disk.target.dev}</td>
+                <td>{disk.source.file.split("/").reverse()[0]}</td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
+    </Card>
   ) : (
     <span />
   );
@@ -141,8 +134,8 @@ const Domain = () => {
       <div className="flex flex-display flex-col">
         <Loader label={`Fetching details...`} loading={isLoading}>
           <div className="row">
-            <div className="col s12">{state}</div>
-            <div className="col s12">{info}</div>
+            <div className="col s6">{state}</div>
+            <div className="col s6">{info}</div>
             <div className="col s12">{interfaces}</div>
             <div className="col s12">{disks}</div>
           </div>

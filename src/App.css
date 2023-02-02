@@ -186,7 +186,7 @@ nav .brand-logo-wrapper {
   position: relative;
 }
 
-.machine-state tr td:first-child {
+.machine-state tr th:first-child {
   width: 50px;
 }
 
