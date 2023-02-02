@@ -35,13 +35,22 @@ const Domain = () => {
     }
   }, [isLoading, data, isError, dispatch, name, navigate, session]);
 
-  const label = hasDomain ? <h2>{domain.name}</h2> : <span />;
-
   const state = hasDomain ? (
     <div className="card" style={{ width: "300px" }}>
       <div className="card-content">
         <span className="card-title">Overview</span>
-        <p>{`State: ${domain.state.string}`}</p>
+        <table className="machine-state">
+          <tbody>
+            <tr>
+              <td className="text-right">{"Name"}</td>
+              <td className="overflow-ellipsis">{domain.name}</td>
+            </tr>
+            <tr>
+              <td className="text-right">{"State"}</td>
+              <td>{domain.state.string}</td>
+            </tr>
+          </tbody>
+        </table>
         <StateControl domain={domain} />
       </div>
     </div>
@@ -102,7 +111,6 @@ const Domain = () => {
   return (
     <Layout>
       <div className="container">
-        {hasDomain && label}
         <FlexCentered>
           <Loader label={`Fetching details...`} loading={isLoading}>
             {state}
