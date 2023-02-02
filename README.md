@@ -1,4 +1,5 @@
-# webvirt_react
+webvirt_react
+-------------
 
 ![lint](https://github.com/kevr/webvirt_react/actions/workflows/lint.yaml/badge.svg?branch=master)
 ![tests](https://github.com/kevr/webvirt_react/actions/workflows/react.yaml/badge.svg?branch=master)
