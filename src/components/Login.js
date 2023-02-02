@@ -40,6 +40,7 @@ const Login = ({ next }) => {
       <div className="input-field">
         <input
           id="login-user"
+          data-testid="login-user"
           className="input-red"
           type="text"
           name="user"
@@ -54,6 +55,7 @@ const Login = ({ next }) => {
       <div className="input-field">
         <input
           id="login-password"
+          data-testid="login-password"
           className="input-red"
           type="password"
           name="password"
@@ -67,6 +69,7 @@ const Login = ({ next }) => {
       </div>
       <div className="text-center">
         <button
+          data-testid="login-submit"
           type="submit"
           className="waves-effect red lighten-2 btn"
           disabled={progress}
