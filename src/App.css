@@ -69,8 +69,16 @@ body {
   font-weight: bold;
 }
 
+.text-left {
+  text-align: left;
+}
+
 .text-center {
   text-align: center;
+}
+
+.text-right {
+  text-align: right;
 }
 
 .login-form-container {
@@ -108,6 +116,12 @@ body {
   text-overflow: ellipsis;
 }
 
+.domain.card .card-title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .react-tooltip {
   z-index: 1;
 }
@@ -127,4 +141,57 @@ body {
 
 .state-control .progress {
   margin: 0px;
+}
+
+.auth-component-wrapper > div > ul > li > a,
+nav .title {
+  text-shadow: 0px 0px 3px black;
+}
+
+nav .brand-logo-wrapper {
+  width: 400px;
+  height: 64px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  text-align: center;
+}
+
+.title {
+  font-size: 24px;
+}
+
+@media screen and (max-width: 800px) {
+  nav .brand-logo-wrapper {
+    width: 300px;
+  }
+
+  nav .title {
+    font-size: 22px;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  nav .brand-logo-wrapper {
+    width: 220px;
+  }
+
+  nav .title {
+    font-size: 20px;
+  }
+}
+
+.nav-wrapper > .container {
+  position: relative;
+}
+
+.machine-state tr td:first-child {
+  width: 50px;
+}
+
+.overflow-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
