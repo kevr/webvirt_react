@@ -121,3 +121,10 @@ body {
   opacity: 0.7;
 }
 
+.state-control {
+  height: 36px;
+}
+
+.state-control .progress {
+  margin: 0px;
+}

@@ -25,16 +25,22 @@ export const sessionReducer = (state = defaultSessionState, action) => {
   }
 };
 
-const defaultVirtState = {};
+const defaultVirtState = { domains: {} };
 
 export const virtReducer = (state = defaultVirtState, action) => {
   switch (action.type) {
     case SET_VIRT_DOMAIN:
-      return Object.assign({}, state, {
-        domains: {
-          [action.domain.name]: action.domain,
-        },
+      const o = Object.assign({}, state, {
+        domains: Object.assign({}, state.domains, {
+          [action.domain.name]: Object.assign(
+            {},
+            state.domains[action.domain.name],
+            action.domain
+          ),
+        }),
       });
+      console.log(o);
+      return o;
     case SET_VIRT_DOMAINS:
       const domains = JSON.parse(JSON.stringify(action.domains));
       const object = {};

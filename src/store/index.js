@@ -9,7 +9,7 @@ export const createStore = () => {
   // Initial store state derived from localStorage
   const initialState = {
     session: session,
-    virt: {},
+    virt: { domains: {} },
   };
 
   return configureStore({

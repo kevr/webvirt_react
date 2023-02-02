@@ -3,19 +3,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { Layout } from "../layouts";
-import { FlexCentered, Loader } from "../components";
+import { FlexCentered, Loader, StateControl } from "../components";
 import { apiRequest } from "../API";
 import { setAppTitle, setVirtDomain } from "../store/Actions";
 
 const Domain = () => {
   const { name } = useParams();
   const session = useSelector((state) => state.session);
-  const domains = useSelector((state) => state.virt.domains || {});
+  const domain = useSelector((state) => state.virt.domains[name]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const hasDomain = domains.hasOwnProperty(name);
-  const hasDomainInfo = hasDomain && domains[name].info !== undefined;
+  const hasDomain = domain !== undefined;
+  const hasDomainInfo = hasDomain && domain.info !== undefined;
 
   const { isLoading, isError, data } = useQuery(
     ["domain", name],
@@ -35,13 +35,14 @@ const Domain = () => {
     }
   }, [isLoading, data, isError, dispatch, name, navigate, session]);
 
-  const label = hasDomain ? <h2>{domains[name].name}</h2> : <span />;
+  const label = hasDomain ? <h2>{domain.name}</h2> : <span />;
 
   const state = hasDomain ? (
     <div className="card" style={{ width: "300px" }}>
       <div className="card-content">
-        <span className="card-title">State</span>
-        <p>{domains[name].state.string}</p>
+        <span className="card-title">Overview</span>
+        <p>{`State: ${domain.state.string}`}</p>
+        <StateControl domain={domain} />
       </div>
     </div>
   ) : (
@@ -56,15 +57,15 @@ const Domain = () => {
           <tbody>
             <tr>
               <td>{"CPUs"}</td>
-              <td>{domains[name].info.cpus}</td>
+              <td>{domain.info.cpus}</td>
             </tr>
             <tr>
               <td>{"Memory (max)"}</td>
-              <td>{domains[name].info.maxMemory / 1024} MB</td>
+              <td>{domain.info.maxMemory / 1024} MB</td>
             </tr>
             <tr>
               <td>{"Memory (allocated)"}</td>
-              <td>{domains[name].info.memory / 1024} MB</td>
+              <td>{domain.info.memory / 1024} MB</td>
             </tr>
           </tbody>
         </table>
@@ -74,14 +75,40 @@ const Domain = () => {
     <span />
   );
 
+  const interfaces = hasDomainInfo ? (
+    <div className="card" style={{ width: "300px" }}>
+      <div className="card-content">
+        <span className="card-title">Network Interfaces</span>
+        <ul>
+          {domain.info.devices.interfaces.map((iface, index) => (
+            <li key={index}>
+              <p>
+                <span>
+                  {iface.name} ({iface.model})
+                </span>
+                <span className="right">{iface.macAddress}</span>
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  ) : (
+    <span />
+  );
+
+  const disks = hasDomainInfo ? <span /> : <span />;
+
   return (
     <Layout>
       <div className="container">
-        {Object.keys(domains).length > 0 && label}
+        {hasDomain && label}
         <FlexCentered>
           <Loader label={`Fetching details...`} loading={isLoading}>
             {state}
             {info}
+            {interfaces}
+            {disks}
           </Loader>
         </FlexCentered>
       </div>
