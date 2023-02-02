@@ -23,6 +23,8 @@ const Domain = () => {
     { retry: 0 }
   );
 
+  console.log(domain);
+
   useEffect(() => {
     dispatch(setAppTitle(`Domain: ${name}`));
 
@@ -36,7 +38,7 @@ const Domain = () => {
   }, [isLoading, data, isError, dispatch, name, navigate, session]);
 
   const state = hasDomain ? (
-    <div className="card" style={{ width: "300px" }}>
+    <div className="card">
       <div className="card-content">
         <span className="card-title">Overview</span>
         <table className="machine-state">
@@ -59,7 +61,7 @@ const Domain = () => {
   );
 
   const info = hasDomainInfo ? (
-    <div className="card" style={{ width: "300px" }}>
+    <div className="card">
       <div className="card-content">
         <span className="card-title">Resources</span>
         <table>
@@ -85,7 +87,7 @@ const Domain = () => {
   );
 
   const interfaces = hasDomainInfo ? (
-    <div className="card" style={{ width: "300px" }}>
+    <div className="card">
       <div className="card-content">
         <span className="card-title">Network Interfaces</span>
         <ul>
@@ -106,19 +108,45 @@ const Domain = () => {
     <span />
   );
 
-  const disks = hasDomainInfo ? <span /> : <span />;
+  const disks = hasDomainInfo ? (
+    <div className="card">
+      <div className="card-content">
+        <span className="card-title">Disks</span>
+        <table>
+          <thead>
+            <tr>
+              <th>{"Target"}</th>
+              <th>{"Source"}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {domain.info.devices.disks
+              .filter((disk) => disk.device === "disk")
+              .map((disk, index) => (
+                <tr key={index}>
+                  <td>/dev/{disk.target.dev}</td>
+                  <td>{disk.source.file.split("/").reverse()[0]}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  ) : (
+    <span />
+  );
 
   return (
     <Layout>
-      <div className="container">
-        <FlexCentered>
-          <Loader label={`Fetching details...`} loading={isLoading}>
-            {state}
-            {info}
-            {interfaces}
-            {disks}
-          </Loader>
-        </FlexCentered>
+      <div className="flex flex-display flex-col">
+        <Loader label={`Fetching details...`} loading={isLoading}>
+          <div className="row">
+            <div className="col s12">{state}</div>
+            <div className="col s12">{info}</div>
+            <div className="col s12">{interfaces}</div>
+            <div className="col s12">{disks}</div>
+          </div>
+        </Loader>
       </div>
     </Layout>
   );
