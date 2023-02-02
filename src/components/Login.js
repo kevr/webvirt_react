@@ -32,7 +32,11 @@ const Login = ({ next }) => {
   };
 
   return (
-    <form onSubmit={onSubmit} style={{ padding: "15px" }}>
+    <form
+      onSubmit={onSubmit}
+      style={{ padding: "15px" }}
+      data-testid="login-form"
+    >
       <div className="input-field">
         <input
           id="login-user"
