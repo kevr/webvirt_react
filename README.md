@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+# webvirt_react
+
+![lint](https://github.com/kevr/webvirt_react/actions/workflows/lint.yaml/badge.svg?branch=master)
+![tests](https://github.com/kevr/webvirt_react/actions/workflows/react.yaml/badge.svg?branch=master)
+[![license](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
