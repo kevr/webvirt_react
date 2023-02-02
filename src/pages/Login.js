@@ -21,6 +21,9 @@ const Login = () => {
         <title>{title}</title>
       </Helmet>
       <div className="flex"></div>
+      <div className="text-center">
+        <img src="/images/logo.png" alt="Logo" width="128px" />
+      </div>
       <div className="flex-display flex-row">
         <div className="flex"></div>
         <div className="login-form-container">
