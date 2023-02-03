@@ -16,7 +16,7 @@
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { apiRefresh } from "../API";
-import { setSession } from "../store/Actions";
+import { removeSession, setSession } from "../store/Actions";
 
 const SessionRefresher = ({ children }) => {
   const session = useSelector((state) => state.session);
@@ -31,6 +31,7 @@ const SessionRefresher = ({ children }) => {
         })
         .catch((error) => {
           console.error(error);
+          dispatch(removeSession());
         });
 
     // Refresh session tokens every thirty minutes.
