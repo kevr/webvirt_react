@@ -13,8 +13,34 @@
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-import { stateString } from "./API";
+import { apiRequest, stateString } from "./API";
+
+global.fetch = jest.fn();
+
+beforeEach(() => {
+  fetch.mockClear();
+});
 
 test("stateString throws with unknown id", () => {
   expect(() => stateString(999)).toThrow();
+});
+
+test("apiRequest defaults", async () => {
+  let options;
+  fetch.mockImplementationOnce((url, opts) => {
+    options = opts;
+    return Promise.resolve({
+      status: 200,
+      json: () =>
+        Promise.resolve({
+          key: "my_data",
+        }),
+    });
+  });
+
+  const json = await apiRequest("abc");
+  expect(json.key).toBe("my_data");
+  expect(fetch).toHaveBeenCalledTimes(1);
+  expect(options.method).toBe("GET");
+  expect(options.body).toBe(undefined);
 });
