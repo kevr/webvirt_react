@@ -42,6 +42,7 @@ const StateControl = ({
         setLoading(false);
       })
       .catch((error) => {
+        console.error(error);
         setLoading(false);
       });
   };
@@ -56,6 +57,7 @@ const StateControl = ({
         setLoading(false);
       })
       .catch((error) => {
+        console.error(error);
         setLoading(false);
       });
   };
@@ -66,13 +68,18 @@ const StateControl = ({
       <Loader type={loaderType} loading={isLoading}>
         {(domain.state.string === "Shutoff" ||
           domain.state.string === "Shutdown") && (
-          <button className="waves-effect red lighten-2 btn" onClick={onStart}>
+          <button
+            className="waves-effect red lighten-2 btn"
+            data-testid="start-submit"
+            onClick={onStart}
+          >
             {startElement}
           </button>
         )}
         {domain.state.string === "Running" && (
           <button
             className="waves-effect red lighten-2 btn"
+            data-testid="shutdown-submit"
             onClick={onShutdown}
           >
             {shutdownElement}

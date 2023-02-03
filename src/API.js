@@ -17,6 +17,32 @@ const apiPrefix = "http://localhost:8000";
 
 export const apiEndpoint = (endpoint) => `${apiPrefix}/${endpoint}/`;
 
+const handleFetch = (fn) => {
+  return fn
+    .then(async (response) => {
+      const data = await response.json();
+
+      if (response.status !== 200 && response.status !== 201) {
+        return Promise.reject({
+          status: response.status,
+          data: data,
+        });
+      }
+
+      return Promise.resolve(data);
+    })
+    .catch((error) => {
+      if (error.data) {
+        return Promise.reject(error);
+      } else {
+        return Promise.reject({
+          status: 500,
+          data: { detail: "Unable to contact API" },
+        });
+      }
+    });
+};
+
 export const apiRequest = (
   endpoint,
   method = "get",
@@ -42,44 +68,53 @@ export const apiRequest = (
     options.body = JSON.stringify(data);
   }
 
-  return fetch(endpoint_, options)
-    .then(async (response) => {
-      const data = await response.json();
-
-      if (response.status !== 200 && response.status !== 201) {
-        return Promise.reject({
-          status: response.status,
-          data: data,
-        });
-      }
-
-      return Promise.resolve(data);
-    })
-    .catch((error) => {
-      if (error.data) {
-        return Promise.reject(error);
-      } else {
-        return Promise.reject({
-          status: 500,
-          data: { detail: "Unable to contact API" },
-        });
-      }
-    });
+  return handleFetch(fetch(endpoint_, options));
 };
 
 export const apiRefresh = (token) => {
   const endpoint = apiEndpoint("auth/refresh");
-  return fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      refresh: token,
-    }),
-  }).then((response) => response.json());
+  return handleFetch(
+    fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        refresh: token,
+      }),
+    })
+  );
 };
 
 export const apiLogin = (user, password) => {
   return apiRequest("auth", "post", {}, { user, password });
+};
+
+/* Constants */
+export const VIR_DOMAIN_NOSTATE = 0;
+export const VIR_DOMAIN_RUNNING = 1;
+export const VIR_DOMAIN_BLOCKED = 2;
+export const VIR_DOMAIN_PAUSED = 3;
+export const VIR_DOMAIN_SHUTDOWN = 4;
+export const VIR_DOMAIN_SHUTOFF = 5;
+export const VIR_DOMAIN_CRASHED = 6;
+export const VIR_DOMAIN_PMSUSPENDED = 7;
+
+const stateStrings = {
+  [VIR_DOMAIN_NOSTATE]: "N/A",
+  [VIR_DOMAIN_RUNNING]: "Running",
+  [VIR_DOMAIN_BLOCKED]: "Blocked",
+  [VIR_DOMAIN_PAUSED]: "Paused",
+  [VIR_DOMAIN_SHUTDOWN]: "Shutdown",
+  [VIR_DOMAIN_SHUTOFF]: "Shutoff",
+  [VIR_DOMAIN_CRASHED]: "Crashed",
+  [VIR_DOMAIN_PMSUSPENDED]: "Suspended",
+};
+
+export const stateString = (id) => {
+  if (!stateStrings.hasOwnProperty(id)) {
+    throw new Error(`Unsupported state ${id}`);
+  }
+
+  return stateStrings[id];
 };
