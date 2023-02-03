@@ -13,26 +13,20 @@
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-import PropTypes from "prop-types";
+import { render, screen, within } from "@testing-library/react";
+import Card from "./Card";
 
-const Card = ({ title, style, children }) => (
-  <div className="card" style={style}>
-    <div className="card-content">
-      <span className="card-title" data-testid="card-title">
-        {title}
-      </span>
-      {children}
-    </div>
-  </div>
-);
+test("Card renders", async () => {
+  render(
+    <Card title={"Test Card"}>
+      <span data-testid="child-element">{"Test content."}</span>
+    </Card>
+  );
 
-Card.propTypes = {
-  title: PropTypes.string.isRequired,
-  style: PropTypes.object,
-};
+  const title = screen.getByTestId("card-title");
+  expect(title).toBeInTheDocument();
+  expect(title.textContent).toBe("Test Card");
 
-Card.defaultProps = {
-  style: {},
-};
-
-export default Card;
+  const child = screen.getByTestId("child-element");
+  expect(child).toBeInTheDocument();
+});
