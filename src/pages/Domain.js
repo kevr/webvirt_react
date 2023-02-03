@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { Layout } from "../layouts";
-import { Card, FlexCentered, Loader, StateControl } from "../components";
+import { Card, Loader, StateControl } from "../components";
 import { apiRequest } from "../API";
 import { setAppTitle, setVirtDomain } from "../store/Actions";
 
