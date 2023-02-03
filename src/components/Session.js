@@ -41,7 +41,7 @@ const Session = ({ children }) => {
     <div>
       <ul id="auth-dropdown" className="dropdown-content">
         <li>
-          <a href="#!" onClick={onLogout}>
+          <a href="#!" data-testid="logout-submit" onClick={onLogout}>
             {"Logout"}
           </a>
         </li>
@@ -50,7 +50,7 @@ const Session = ({ children }) => {
       <ul className="right">
         <li>
           <a className="dropdown-trigger" href="#!" data-target="auth-dropdown">
-            <b>{session.user || "Logged In"}</b>{" "}
+            <b>{session.user}</b>{" "}
             <i className="material-icons right">arrow_drop_down</i>
           </a>
         </li>
