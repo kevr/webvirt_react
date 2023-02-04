@@ -39,6 +39,13 @@
       "plugin:prettier/recommended"
     ]
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!src/index.js",
+      "!src/reportWebVitals.js"
+    ]
+  },
   "browserslist": {
     "production": [
       ">0.2%",
