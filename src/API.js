@@ -13,9 +13,9 @@
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-const apiPrefix = "http://localhost:8000";
+import config from "./Config";
 
-export const apiEndpoint = (endpoint) => `${apiPrefix}/${endpoint}/`;
+export const apiEndpoint = (endpoint) => `${config.apiPrefix}/${endpoint}/`;
 
 const handleFetch = (fn) => {
   return fn

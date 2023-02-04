@@ -7,6 +7,13 @@ webvirt_react
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Configuration
+
+Configuration for the website is located at [src/Config.json](src/Config.json).
+Users should set the following:
+
+- `apiPrefix`: URL prefix to [webvirt_api](https://github.com/kevr/webvirt_api)
+
 ## Available Scripts
 
 In the project directory, you can run:
