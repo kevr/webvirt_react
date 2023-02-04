@@ -19,6 +19,6 @@ import { QueryClient } from "react-query";
 global.fetch = jest.fn();
 
 beforeEach(() => {
-  fetch.mockClear();
+  global.fetch.mockClear();
   global.queryClient = new QueryClient();
 });
