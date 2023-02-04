@@ -39,13 +39,8 @@ export const setVirtDomains = (domains) => ({
 });
 
 export const SET_APP_TITLE = "SET_APP_TITLE";
-export const REMOVE_APP_TITLE = "REMOVE_APP_TITLE";
 
 export const setAppTitle = (title) => ({
   type: SET_APP_TITLE,
   title: title,
-});
-
-export const removeAppTitle = () => ({
-  type: REMOVE_APP_TITLE,
 });

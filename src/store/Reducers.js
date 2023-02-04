@@ -14,7 +14,6 @@
  * permissions and limitations under the License.
  */
 import {
-  REMOVE_APP_TITLE,
   REMOVE_SESSION,
   SET_APP_TITLE,
   SET_SESSION,
@@ -76,8 +75,6 @@ export const appReducer = (state = defaultAppState, action) => {
   switch (action.type) {
     case SET_APP_TITLE:
       return Object.assign({}, state, { title: action.title });
-    case REMOVE_APP_TITLE:
-      return defaultAppState;
     default:
       return state;
   }
