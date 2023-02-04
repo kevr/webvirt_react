@@ -7,9 +7,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Set up Node 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: node_modules Cache
+        id: node-modules-cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ runner.temp }}/node_modules
+          key: ${{ runner.os }}-node-modules
+
+      - name: node_modules Restore Cache
+        if: steps.node-modules-cache.outputs.cache-hit == 'true'
+        env:
+          SOURCE: ${{ runner.temp }}/node_modules
+        run: |
+          cp -r --force -v ${SOURCE} ./node_modules
+
+      - name: Install Node dependencies
+        run: |
+          npm ci
+          cp -r --force ./node_modules ${{ runner.temp }}/node_modules
+          npm install -g eslint
 
       - name: Run Javascript license checks
         run: bash scripts/check-license.sh . js
 
       - name: Run CSS license checks
         run: bash scripts/check-license.sh . css
+
+      - name: Run eslint checks
+        run: eslint src
