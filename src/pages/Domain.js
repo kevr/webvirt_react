@@ -95,7 +95,7 @@ const Domain = () => {
 
   const interfaces = hasDomainInfo ? (
     <Card title="Network Interfaces">
-      <table>
+      <table data-testid="interface">
         <thead>
           <tr>
             <th>{"Name"}</th>
@@ -121,7 +121,7 @@ const Domain = () => {
 
   const disks = hasDomainInfo ? (
     <Card title="Disks">
-      <table>
+      <table data-testid="disk">
         <thead>
           <tr>
             <th>{"Target"}</th>
