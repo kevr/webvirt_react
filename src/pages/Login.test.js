@@ -144,6 +144,7 @@ test("Login gracefully fails", async () => {
   fetch.mockReturnValueOnce(
     Promise.resolve({
       status: 401,
+      detail: "Invalid username/password",
     })
   );
 
