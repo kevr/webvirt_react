@@ -50,7 +50,7 @@ const Dashboard = () => {
     }
   }, [data, isError, isLoading, session, dispatch, location, navigate]);
 
-  const domains = JSON.parse(JSON.stringify(virt.domains || {}));
+  const domains = JSON.parse(JSON.stringify(virt.domains));
   return (
     <Layout>
       <div className="domains container flex flex-display flex-col">

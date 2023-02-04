@@ -44,7 +44,7 @@ const DomainCard = ({ domain, uuid }) => {
   const cardColor = STATE_CARD_COLORS[domain.state.string];
   return (
     <div className="col s6 m4">
-      <div className={`domain card ${cardColor}`}>
+      <div className={`domain card ${cardColor}`} data-testid="domain">
         <div
           id={`domain-tooltip-${uuid}`}
           data-tooltip-content={`${domain.name}: ${domain.state.string}`}

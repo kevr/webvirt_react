@@ -21,6 +21,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { createStore } from "../store";
 import { setSession } from "../store/Actions";
 import { appRoutes } from "../Routing";
+import { stateString, VIR_DOMAIN_RUNNING } from "../API";
 
 test("Dashboard gracefully fails", async () => {
   const router = createMemoryRouter(appRoutes, {
@@ -60,4 +61,72 @@ test("Dashboard gracefully fails", async () => {
 
   // A graceful 401 failure leads to a navigation to /login.
   expect(router.state.location.pathname).toBe("/login");
+});
+
+test("Dashboard renders domains", async () => {
+  const mockDomain = (
+    name,
+    id = -1,
+    stateId = VIR_DOMAIN_RUNNING,
+    stateStr = stateString(VIR_DOMAIN_RUNNING)
+  ) => ({
+    id: id,
+    name: name,
+    state: {
+      id: stateId,
+      string: stateStr,
+    },
+  });
+  const domains = [
+    mockDomain("test_machine", 1),
+    mockDomain("test_machine2", 2),
+  ];
+
+  fetch
+    .mockReturnValueOnce(
+      Promise.resolve({
+        status: 200,
+        json: () =>
+          Promise.resolve({
+            user: "test",
+            access: "new_access_token",
+            refresh: "new_refresh_token",
+          }),
+      })
+    )
+    .mockReturnValueOnce(
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve(domains),
+      })
+    );
+
+  const router = createMemoryRouter(appRoutes, {
+    initialEntries: ["/"],
+  });
+
+  const store = createStore();
+  store.dispatch(
+    setSession({
+      user: "test",
+      access: "test_access",
+      refresh: "test_refresh",
+    })
+  );
+
+  await act(() =>
+    render(
+      <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+          <HelmetProvider>
+            <RouterProvider router={router} />
+          </HelmetProvider>
+        </QueryClientProvider>
+      </Provider>
+    )
+  );
+
+  expect(router.state.location.pathname).toBe("/");
+  const domainElements = screen.getAllByTestId("domain");
+  expect(domainElements.length).toBe(2);
 });
