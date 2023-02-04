@@ -15,14 +15,10 @@
  */
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClientProvider } from "react-query";
 import { createStore } from "../store";
 import { setSession } from "../store/Actions";
 import Session from "./Session";
-
-beforeEach(() => {
-  global.queryClient = new QueryClient();
-});
 
 test("Session can perform logout", async () => {
   const store = createStore();

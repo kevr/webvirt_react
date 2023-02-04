@@ -16,15 +16,9 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { createStore } from "../store";
-import StateControl from "./StateControl";
 import { setSession, setVirtDomain } from "../store/Actions";
 import { VIR_DOMAIN_SHUTOFF, stateString, VIR_DOMAIN_RUNNING } from "../API";
-
-global.fetch = jest.fn();
-
-beforeEach(() => {
-  fetch.mockClear();
-});
+import StateControl from "./StateControl";
 
 test("StateControl starts via webvirtd", async () => {
   const store = createStore();

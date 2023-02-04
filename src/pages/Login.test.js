@@ -21,18 +21,10 @@ import {
   createMemoryRouter,
 } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClientProvider } from "react-query";
 import { createStore } from "../store";
 import Login from "./Login";
 import { appRoutes } from "../Routing";
-
-global.fetch = jest.fn();
-global.queryClient = new QueryClient();
-
-beforeEach(() => {
-  fetch.mockClear();
-  global.queryClient = new QueryClient();
-});
 
 test("Login page renders", async () => {
   const store = createStore();

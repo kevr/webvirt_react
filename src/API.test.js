@@ -15,12 +15,6 @@
  */
 import { apiRequest, stateString } from "./API";
 
-global.fetch = jest.fn();
-
-beforeEach(() => {
-  fetch.mockClear();
-});
-
 test("stateString throws with unknown id", () => {
   expect(() => stateString(999)).toThrow();
 });

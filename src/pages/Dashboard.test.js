@@ -22,14 +22,6 @@ import { createStore } from "../store";
 import { setSession } from "../store/Actions";
 import { appRoutes } from "../Routing";
 
-global.fetch = jest.fn();
-global.queryClient = new QueryClient();
-
-beforeEach(() => {
-  fetch.mockClear();
-  global.queryClient = new QueryClient();
-});
-
 test("Dashboard gracefully fails", async () => {
   const router = createMemoryRouter(appRoutes, {
     initialEntries: ["/"],

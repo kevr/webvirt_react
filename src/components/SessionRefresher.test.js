@@ -19,12 +19,6 @@ import { createStore } from "../store";
 import { setSession } from "../store/Actions";
 import SessionRefresher from "./SessionRefresher";
 
-global.fetch = jest.fn();
-
-beforeEach(() => {
-  fetch.mockClear();
-});
-
 test("SessionRefresher gracefully fails", async () => {
   fetch.mockReturnValueOnce(
     Promise.resolve({
