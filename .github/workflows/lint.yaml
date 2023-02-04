@@ -23,8 +23,7 @@ jobs:
         if: steps.node-modules-cache.outputs.cache-hit == 'true'
         env:
           SOURCE: ${{ runner.temp }}/node_modules
-        run: |
-          cp -r --force -v ${SOURCE} ./node_modules
+        run: cp -r --force -v ${SOURCE} ./node_modules
 
       - name: Install Node dependencies
         run: |
