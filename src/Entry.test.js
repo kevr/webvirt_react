@@ -17,6 +17,13 @@ import { act, render, screen } from "@testing-library/react";
 import Entry from "./Entry";
 
 test("renders login form", async () => {
+  fetch.mockReturnValueOnce(
+    Promise.resolve({
+      status: 401,
+      json: () => Promise.resolve({ detail: "Unauthorized" }),
+    })
+  );
+
   await act(async () => render(<Entry />));
   const form = screen.getByTestId("login-form");
   expect(form).toBeInTheDocument();
