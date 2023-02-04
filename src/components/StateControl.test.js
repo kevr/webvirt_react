@@ -16,7 +16,7 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { createStore } from "../store";
-import { setSession, setVirtDomain } from "../store/Actions";
+import { setSession } from "../store/Actions";
 import { VIR_DOMAIN_SHUTOFF, stateString, VIR_DOMAIN_RUNNING } from "../API";
 import StateControl from "./StateControl";
 
@@ -40,12 +40,13 @@ test("StateControl starts via webvirtd", async () => {
     },
   };
 
-  await act(() =>
-    render(
-      <Provider store={store}>
-        <StateControl domain={domain} />
-      </Provider>
-    )
+  await act(
+    async () =>
+      await render(
+        <Provider store={store}>
+          <StateControl domain={domain} />
+        </Provider>
+      )
   );
 
   fetch.mockReturnValueOnce(
@@ -64,7 +65,7 @@ test("StateControl starts via webvirtd", async () => {
   );
 
   const startButton = screen.getByTestId("start-submit");
-  await act(() => fireEvent.click(startButton));
+  await act(async () => await fireEvent.click(startButton));
   expect(fetch).toHaveBeenCalledTimes(1);
 });
 
@@ -88,12 +89,13 @@ test("StateControl start gracefully fails", async () => {
     },
   };
 
-  await act(() =>
-    render(
-      <Provider store={store}>
-        <StateControl domain={domain} />
-      </Provider>
-    )
+  await act(
+    async () =>
+      await render(
+        <Provider store={store}>
+          <StateControl domain={domain} />
+        </Provider>
+      )
   );
 
   fetch.mockReturnValueOnce(
@@ -107,7 +109,7 @@ test("StateControl start gracefully fails", async () => {
   );
 
   const startButton = screen.getByTestId("start-submit");
-  await act(() => fireEvent.click(startButton));
+  await act(async () => await fireEvent.click(startButton));
   expect(fetch).toHaveBeenCalledTimes(1);
 });
 
@@ -131,12 +133,13 @@ test("StateControl shuts down via webvirtd", async () => {
     },
   };
 
-  await act(() =>
-    render(
-      <Provider store={store}>
-        <StateControl domain={domain} />
-      </Provider>
-    )
+  await act(
+    async () =>
+      await render(
+        <Provider store={store}>
+          <StateControl domain={domain} />
+        </Provider>
+      )
   );
 
   fetch.mockReturnValueOnce(
@@ -155,7 +158,7 @@ test("StateControl shuts down via webvirtd", async () => {
   );
 
   const shutdownButton = screen.getByTestId("shutdown-submit");
-  await act(() => fireEvent.click(shutdownButton));
+  await act(async () => await fireEvent.click(shutdownButton));
   expect(fetch).toHaveBeenCalledTimes(1);
 });
 
@@ -179,12 +182,13 @@ test("StateControl shutdown gracefully fails", async () => {
     },
   };
 
-  await act(() =>
-    render(
-      <Provider store={store}>
-        <StateControl domain={domain} />
-      </Provider>
-    )
+  await act(
+    async () =>
+      await render(
+        <Provider store={store}>
+          <StateControl domain={domain} />
+        </Provider>
+      )
   );
 
   fetch.mockReturnValueOnce(
@@ -198,6 +202,6 @@ test("StateControl shutdown gracefully fails", async () => {
   );
 
   const shutdownButton = screen.getByTestId("shutdown-submit");
-  await act(() => fireEvent.click(shutdownButton));
+  await act(async () => await fireEvent.click(shutdownButton));
   expect(fetch).toHaveBeenCalledTimes(1);
 });

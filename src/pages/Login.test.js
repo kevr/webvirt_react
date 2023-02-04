@@ -21,23 +21,30 @@ import {
   createMemoryRouter,
 } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
-import { QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { createStore } from "../store";
 import Login from "./Login";
 import { appRoutes } from "../Routing";
 
+let queryClient = new QueryClient();
+
+beforeEach(() => {
+  queryClient = new QueryClient();
+});
+
 test("Login page renders", async () => {
   const store = createStore();
-  await act(async () =>
-    render(
-      <Provider store={store}>
-        <HelmetProvider>
-          <MemoryRouter initialEntries={["/login?next=%2F"]}>
-            <Login />
-          </MemoryRouter>
-        </HelmetProvider>
-      </Provider>
-    )
+  await act(
+    async () =>
+      await render(
+        <Provider store={store}>
+          <HelmetProvider>
+            <MemoryRouter initialEntries={["/login?next=%2F"]}>
+              <Login />
+            </MemoryRouter>
+          </HelmetProvider>
+        </Provider>
+      )
   );
 
   const form = screen.getByTestId("login-form");
@@ -50,16 +57,17 @@ test("Login page navigates to / on login", async () => {
   });
 
   const store = createStore();
-  await act(async () =>
-    render(
-      <Provider store={store}>
-        <QueryClientProvider client={queryClient}>
-          <HelmetProvider>
-            <RouterProvider router={router} />
-          </HelmetProvider>
-        </QueryClientProvider>
-      </Provider>
-    )
+  await act(
+    async () =>
+      await render(
+        <Provider store={store}>
+          <QueryClientProvider client={queryClient}>
+            <HelmetProvider>
+              <RouterProvider router={router} />
+            </HelmetProvider>
+          </QueryClientProvider>
+        </Provider>
+      )
   );
 
   const good = [
@@ -104,21 +112,25 @@ test("Login page navigates to / on login", async () => {
   const submitButton = screen.getByTestId("login-submit");
   expect(submitButton).toBeInTheDocument();
 
-  await act(async () => {
-    await fireEvent.change(userInput, {
-      target: {
-        value: "test_user",
-      },
-    });
+  await act(
+    async () =>
+      await fireEvent.change(userInput, {
+        target: {
+          value: "test_user",
+        },
+      })
+  );
 
-    await fireEvent.change(passwordInput, {
-      target: {
-        value: "test_password",
-      },
-    });
+  await act(
+    async () =>
+      await fireEvent.change(passwordInput, {
+        target: {
+          value: "test_password",
+        },
+      })
+  );
 
-    await fireEvent.click(submitButton);
-  });
+  await act(async () => await fireEvent.click(submitButton));
 
   expect(router.state.location.pathname).toBe("/");
 });
@@ -129,16 +141,17 @@ test("Login gracefully fails", async () => {
   });
 
   const store = createStore();
-  await act(async () =>
-    render(
-      <Provider store={store}>
-        <QueryClientProvider client={queryClient}>
-          <HelmetProvider>
-            <RouterProvider router={router} />
-          </HelmetProvider>
-        </QueryClientProvider>
-      </Provider>
-    )
+  await act(
+    async () =>
+      await render(
+        <Provider store={store}>
+          <QueryClientProvider client={queryClient}>
+            <HelmetProvider>
+              <RouterProvider router={router} />
+            </HelmetProvider>
+          </QueryClientProvider>
+        </Provider>
+      )
   );
 
   fetch.mockReturnValueOnce(
@@ -151,9 +164,7 @@ test("Login gracefully fails", async () => {
   const submitButton = screen.getByTestId("login-submit");
   expect(submitButton).toBeInTheDocument();
 
-  await act(async () => {
-    await fireEvent.click(submitButton);
-  });
+  await act(async () => await fireEvent.click(submitButton));
 
   expect(router.state.location.pathname).toBe("/login");
   const error = screen.getByTestId("error");

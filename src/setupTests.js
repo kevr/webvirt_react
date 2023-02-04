@@ -14,11 +14,9 @@
  * permissions and limitations under the License.
  */
 import "@testing-library/jest-dom";
-import { QueryClient } from "react-query";
 
 global.fetch = jest.fn();
 
 beforeEach(() => {
   global.fetch.mockClear();
-  global.queryClient = new QueryClient();
 });

@@ -15,10 +15,16 @@
  */
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
-import { QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { createStore } from "../store";
 import { setSession } from "../store/Actions";
 import Session from "./Session";
+
+let queryClient = new QueryClient();
+
+beforeEach(() => {
+  queryClient = new QueryClient();
+});
 
 test("Session can perform logout", async () => {
   const store = createStore();
@@ -31,20 +37,21 @@ test("Session can perform logout", async () => {
     })
   );
 
-  await act(async () =>
-    render(
-      <Provider store={store}>
-        <QueryClientProvider client={queryClient}>
-          <Session />
-        </QueryClientProvider>
-      </Provider>
-    )
+  await act(
+    async () =>
+      await render(
+        <Provider store={store}>
+          <QueryClientProvider client={queryClient}>
+            <Session />
+          </QueryClientProvider>
+        </Provider>
+      )
   );
 
   const submitButton = screen.getByTestId("logout-submit");
   expect(submitButton).toBeInTheDocument();
 
-  await act(() => fireEvent.click(submitButton));
+  await act(async () => await fireEvent.click(submitButton));
 
   const session = store.getState().session;
   expect(session).toStrictEqual({});

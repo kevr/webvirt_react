@@ -19,9 +19,15 @@ import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { HelmetProvider } from "react-helmet-async";
 import { createStore } from "../store";
-import { setSession, setVirtDomain } from "../store/Actions";
+import { setSession } from "../store/Actions";
 import { stateString, VIR_DOMAIN_RUNNING } from "../API";
 import { appRoutes } from "../Routing";
+
+let queryClient = new QueryClient();
+
+beforeEach(() => {
+  queryClient = new QueryClient();
+});
 
 test("Domain renders", async () => {
   const router = createMemoryRouter(appRoutes, {
@@ -96,16 +102,17 @@ test("Domain renders", async () => {
       })
     );
 
-  await act(() =>
-    render(
-      <Provider store={store}>
-        <HelmetProvider>
-          <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />
-          </QueryClientProvider>
-        </HelmetProvider>
-      </Provider>
-    )
+  await act(
+    async () =>
+      await render(
+        <Provider store={store}>
+          <HelmetProvider>
+            <QueryClientProvider client={queryClient}>
+              <RouterProvider router={router} />
+            </QueryClientProvider>
+          </HelmetProvider>
+        </Provider>
+      )
   );
 
   const iface = screen.getByTestId("interface");
@@ -172,16 +179,17 @@ test("Domain gracefully navigates to /", async () => {
       })
     );
 
-  await act(() =>
-    render(
-      <Provider store={store}>
-        <HelmetProvider>
-          <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />
-          </QueryClientProvider>
-        </HelmetProvider>
-      </Provider>
-    )
+  await act(
+    async () =>
+      await render(
+        <Provider store={store}>
+          <HelmetProvider>
+            <QueryClientProvider client={queryClient}>
+              <RouterProvider router={router} />
+            </QueryClientProvider>
+          </HelmetProvider>
+        </Provider>
+      )
   );
 
   expect(fetch).toBeCalledTimes(4);

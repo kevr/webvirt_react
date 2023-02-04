@@ -13,7 +13,7 @@
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-import { act, render, screen } from "@testing-library/react";
+import { act, render } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { createStore } from "../store";
 import { setSession } from "../store/Actions";
@@ -39,12 +39,13 @@ test("SessionRefresher gracefully fails", async () => {
     })
   );
 
-  await act(() =>
-    render(
-      <Provider store={store}>
-        <SessionRefresher />
-      </Provider>
-    )
+  await act(
+    async () =>
+      await render(
+        <Provider store={store}>
+          <SessionRefresher />
+        </Provider>
+      )
   );
 
   const session = store.getState().session;

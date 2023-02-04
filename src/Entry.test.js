@@ -24,7 +24,7 @@ test("renders login form", async () => {
     })
   );
 
-  await act(async () => render(<Entry />));
+  await act(async () => await render(<Entry />));
   const form = screen.getByTestId("login-form");
   expect(form).toBeInTheDocument();
 });

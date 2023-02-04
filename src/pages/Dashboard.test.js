@@ -23,6 +23,12 @@ import { setSession } from "../store/Actions";
 import { appRoutes } from "../Routing";
 import { stateString, VIR_DOMAIN_RUNNING } from "../API";
 
+let queryClient = new QueryClient();
+
+beforeEach(() => {
+  queryClient = new QueryClient();
+});
+
 test("Dashboard gracefully fails", async () => {
   const router = createMemoryRouter(appRoutes, {
     initialEntries: ["/"],
@@ -47,16 +53,17 @@ test("Dashboard gracefully fails", async () => {
     })
   );
 
-  await act(async () =>
-    render(
-      <Provider store={store}>
-        <QueryClientProvider client={queryClient}>
-          <HelmetProvider>
-            <RouterProvider router={router} />
-          </HelmetProvider>
-        </QueryClientProvider>
-      </Provider>
-    )
+  await act(
+    async () =>
+      await render(
+        <Provider store={store}>
+          <QueryClientProvider client={queryClient}>
+            <HelmetProvider>
+              <RouterProvider router={router} />
+            </HelmetProvider>
+          </QueryClientProvider>
+        </Provider>
+      )
   );
 
   // A graceful 401 failure leads to a navigation to /login.
@@ -114,16 +121,17 @@ test("Dashboard renders domains", async () => {
     })
   );
 
-  await act(() =>
-    render(
-      <Provider store={store}>
-        <QueryClientProvider client={queryClient}>
-          <HelmetProvider>
-            <RouterProvider router={router} />
-          </HelmetProvider>
-        </QueryClientProvider>
-      </Provider>
-    )
+  await act(
+    async () =>
+      await render(
+        <Provider store={store}>
+          <QueryClientProvider client={queryClient}>
+            <HelmetProvider>
+              <RouterProvider router={router} />
+            </HelmetProvider>
+          </QueryClientProvider>
+        </Provider>
+      )
   );
 
   expect(router.state.location.pathname).toBe("/");
