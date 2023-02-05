@@ -32,20 +32,26 @@ const Networking = ({ domain }) => {
   }
 
   return (
-    <Table>
-      <THead>
-        <Row>
-          <Header>Name</Header>
-          <Header>Model</Header>
-          <Header>MAC</Header>
-        </Row>
-      </THead>
-      <TBody>
-        {networks.map((network, index) => (
-          <NetworkRow key={index} network={network} />
-        ))}
-      </TBody>
-    </Table>
+    <div className="container">
+      <div className="row">
+        <div className="col s12">
+          <Table>
+            <THead>
+              <Row>
+                <Header>Name</Header>
+                <Header>Model</Header>
+                <Header>MAC</Header>
+              </Row>
+            </THead>
+            <TBody>
+              {networks.map((network, index) => (
+                <NetworkRow key={index} network={network} />
+              ))}
+            </TBody>
+          </Table>
+        </div>
+      </div>
+    </div>
   );
 };
 

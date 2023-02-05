@@ -31,22 +31,28 @@ const Storage = ({ domain }) => {
   }
 
   return (
-    <Table>
-      <THead>
-        <Row>
-          <Header>Driver</Header>
-          <Header>Bus</Header>
-          <Header>Target</Header>
-          <Header>Source</Header>
-        </Row>
-      </THead>
+    <div className="container">
+      <div className="row">
+        <div className="col s12">
+          <Table>
+            <THead>
+              <Row>
+                <Header>Driver</Header>
+                <Header>Bus</Header>
+                <Header>Target</Header>
+                <Header>Source</Header>
+              </Row>
+            </THead>
 
-      <TBody>
-        {disks.map((disk, index) => (
-          <DiskRow key={index} disk={disk} />
-        ))}
-      </TBody>
-    </Table>
+            <TBody>
+              {disks.map((disk, index) => (
+                <DiskRow key={index} disk={disk} />
+              ))}
+            </TBody>
+          </Table>
+        </div>
+      </div>
+    </div>
   );
 };
 

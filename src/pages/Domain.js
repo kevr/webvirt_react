@@ -43,6 +43,7 @@ const Domain = () => {
     if (!isLoading) {
       if (!isError) {
         dispatch(setVirtDomain(data));
+        dispatch(setAppTitle(`Domain - ${data.title || name}`));
       } else {
         navigate("/");
       }
@@ -52,9 +53,7 @@ const Domain = () => {
   const tabs = (
     <Tabs id="domain-tabs">
       <Tab linkId="overview" title="Overview">
-        <div className="col s6">
-          <Overview domain={domain} refetch={refetch} />
-        </div>
+        <Overview domain={domain} refetch={refetch} />
       </Tab>
       <Tab linkId="networking" title="Networking">
         <Networking domain={domain} />

@@ -15,43 +15,67 @@
  */
 import { Table, SimpleRow, TBody } from "../Table";
 import StateControl from "../StateControl";
+import config from "../../Config.json";
 
 const Overview = ({ domain, refetch }) => {
   let state = undefined;
+  let stateColor = "";
   if (domain.state) {
     state = domain.state.string;
+    stateColor = config.stateColors.foreground[state];
   }
 
-  const info = domain.info || {};
+  const info = domain.info || { devices: {}, os: { boot: {}, type: {} } };
   return (
-    <div className="overview" style={{ marginTop: "10px" }}>
-      <div>
-        <div className="flex-display flex-row">
-          <StateControl
-            className="state-control-button"
-            loaderType="spinner"
-            domain={domain}
-            startElement={<i className="material-icons">play_arrow</i>}
-            onStart={refetch}
-            shutdownElement={<i className="material-icons">stop</i>}
-            onShutdown={refetch}
-          />
+    <div className="overview container">
+      <div className="row">
+        <div className="col s6">
+          <div>
+            <div className="flex-display flex-row">
+              <StateControl
+                className="state-control-button"
+                loaderType="spinner"
+                domain={domain}
+                startElement={<i className="material-icons">play_arrow</i>}
+                onStart={refetch}
+                shutdownElement={<i className="material-icons">stop</i>}
+                onShutdown={refetch}
+              />
 
-          <div className="flex">
-            <h3 className="domain-name">{domain.name}</h3>
+              <div className="flex">
+                <h3 className="domain-name">{domain.title || domain.name}</h3>
+              </div>
+            </div>
           </div>
+          <Table>
+            <TBody>
+              <SimpleRow title="Name">{domain.name}</SimpleRow>
+              <SimpleRow title="UUID">{domain.uuid}</SimpleRow>
+              <SimpleRow title="State">
+                <span className={stateColor}>{state}</span>
+              </SimpleRow>
+              <SimpleRow title="Title">{domain.title}</SimpleRow>
+              <SimpleRow title="Description">{domain.description}</SimpleRow>
+            </TBody>
+          </Table>
+        </div>
+        <div className="col s6">
+          <h5>Hypervisor Details</h5>
+          <Table>
+            <TBody>
+              <SimpleRow title="Hypervisor">{domain.type}</SimpleRow>
+              <SimpleRow title="Architecture">{info.os.type.arch}</SimpleRow>
+              <SimpleRow title="Emulator">
+                {(info.devices.emulator || "").split("/").at(-1)}
+              </SimpleRow>
+              <SimpleRow title="Chipset">{info.os.type.machine}</SimpleRow>
+              <SimpleRow title="Firmware">
+                {info.os.boot.dev === "hd" ? "BIOS" : "EFI"}
+              </SimpleRow>
+            </TBody>
+          </Table>
         </div>
       </div>
-      <Table>
-        <TBody>
-          <SimpleRow title="State">{state}</SimpleRow>
-          {info.os && <SimpleRow title="OS">{info.os}</SimpleRow>}
-          <SimpleRow title="CPUs">{info.cpus}</SimpleRow>
-          <SimpleRow title="Memory">
-            {info.memory / 1024} / {info.maxMemory / 1024} MB
-          </SimpleRow>
-        </TBody>
-      </Table>
     </div>
   );
 };
