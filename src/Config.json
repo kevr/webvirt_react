@@ -1,3 +1,25 @@
 {
-  "apiPrefix": "http://localhost:8000"
+  "apiPrefix": "http://localhost:8000",
+  "stateColors": {
+    "background": {
+      "None": "",
+      "Running": "green lighten-5",
+      "Blocked": "red lighten-4",
+      "Paused": "grey lighten-1",
+      "Shutdown": "yellow lighten-5",
+      "Shutoff": "grey lighten-4",
+      "Crashed": "red lighten-4",
+      "Suspended": "blue lighten-5"
+    },
+    "foreground": {
+      "None": "",
+      "Running": "green-text text-darken-4",
+      "Blocked": "red-text text-darken-4",
+      "Paused": "grey-text text-darken-3",
+      "Shutdown": "grey-text text-darken-3",
+      "Shutoff": "",
+      "Crashed": "red-text text-darken-4",
+      "Suspended": "blue-text text-darken-4"
+    }
+  }
 }
