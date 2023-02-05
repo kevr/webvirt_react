@@ -50,7 +50,7 @@ Tabs.propTypes = {
 
 export const Tab = ({ id, tabId, index, children }) => {
   return (
-    <div id={`${id}-tab-${index}`} className="col s12">
+    <div id={`${id}-tab-${index}`} className="col s12 tab">
       {children}
     </div>
   );
