@@ -13,10 +13,10 @@
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+import { createBrowserRouter } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Domain from "./pages/Domain";
-import { createBrowserRouter } from "react-router-dom";
 
 export const appRoutes = [
   {
