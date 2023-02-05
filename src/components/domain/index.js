@@ -13,27 +13,11 @@
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-const Error = ({ inline, enabled, error, children }) => {
-  if (!enabled) {
-    return children;
-  }
+import Overview from "./Overview";
+import Networking from "./Networking";
+import Storage from "./Storage";
 
-  return (
-    <div className="red-text text-lighten-1 text-center">
-      {!inline && (
-        <div>
-          <i className="material-icons medium">error</i>
-        </div>
-      )}
-      <div className="error" data-testid="error">
-        {error.data.detail}
-      </div>
-    </div>
-  );
-};
+export { Overview, Networking, Storage };
 
-Error.defaultProps = {
-  inline: false,
-};
-
-export default Error;
+const exports = { Overview, Networking, Storage };
+export default exports;

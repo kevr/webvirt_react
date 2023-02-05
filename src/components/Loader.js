@@ -18,9 +18,31 @@ import FlexCentered from "./FlexCentered";
 
 const getLoaderByType = (type) => {
   switch (type) {
+    case "spinner":
+      return (
+        <div className="preloader">
+          <div className="preloader-wrapper small active">
+            <div className="spinner-layer spinner-red-only">
+              <div className="circle-clipper left">
+                <div className="circle"></div>
+              </div>
+              <div className="gap-patch">
+                <div className="circle"></div>
+              </div>
+              <div className="circle-clipper right">
+                <div className="circle"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+
     default:
       return (
-        <div className="progress red lighten-3" style={{ width: "100px" }}>
+        <div
+          className="progress red lighten-3"
+          style={{ width: "100px", marginBottom: "16px" }}
+        >
           <div className="indeterminate red lighten-1"></div>
         </div>
       );

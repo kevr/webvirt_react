@@ -23,6 +23,7 @@ import Navbar from "./Navbar";
 import Session from "./Session";
 import SessionRefresher from "./SessionRefresher";
 import StateControl from "./StateControl";
+import { Tab, Tabs } from "./Tabs";
 
 export {
   Card,
@@ -35,6 +36,8 @@ export {
   Session,
   SessionRefresher,
   StateControl,
+  Tab,
+  Tabs,
 };
 
 const exports = {
@@ -48,5 +51,7 @@ const exports = {
   Session,
   SessionRefresher,
   StateControl,
+  Tab,
+  Tabs,
 };
 export default exports;

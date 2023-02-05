@@ -23,6 +23,7 @@ import Loader from "./Loader";
 const StateControl = ({
   loaderType,
   domain,
+  className,
   shutdownElement,
   startElement,
 }) => {
@@ -62,8 +63,12 @@ const StateControl = ({
       });
   };
 
+  if (!domain.state) {
+    return <span />;
+  }
+
   return (
-    <div className="state-control flex-display flex-col">
+    <div className={`state-control flex-display flex-col ${className}`}>
       <div className="flex"></div>
       <Loader type={loaderType} loading={isLoading}>
         {(domain.state.string === "Shutoff" ||
@@ -95,9 +100,10 @@ StateControl.defaultProps = {
   startElement: "Start",
   shutdownElement: "Shutdown",
   loaderType: "progress",
+  className: "",
 };
 
-StateControl.requiredProps = {
+StateControl.propTypes = {
   loaderType: PropTypes.string,
 };
 

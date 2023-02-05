@@ -210,3 +210,32 @@ nav .brand-logo-wrapper {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
+.inline {
+  display: inline;
+}
+
+.small-button, .small-button button {
+  width: 50px;
+}
+
+.domain-name {
+  margin: 0;
+  padding: 0;
+}
+
+.overview .state-control-button {
+  padding-top: 6px;
+  padding-right: 20px;
+}
+
+.overview .state-control-button .preloader {
+  width: 51.5px;
+}
+
+.overview .state-control-button .preloader-wrapper {
+  height: 28px;
+  width: 28px;
+  margin-top: -8px;
+  margin-left: 11px;
+}
