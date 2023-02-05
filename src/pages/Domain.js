@@ -31,7 +31,7 @@ const Domain = () => {
   const { name } = useParams();
   const domain = useSelector((state) => state.virt.domains[name] || {});
 
-  const { isLoading, isError, data, error } = useQuery(
+  const { isLoading, isError, data, error, refetch } = useQuery(
     ["domain", name],
     () => apiRequest(`domains/${name}`, "get", session),
     { retry: 0 }
@@ -53,7 +53,7 @@ const Domain = () => {
     <Tabs id="domain-tabs">
       <Tab linkId="overview" title="Overview">
         <div className="col s6">
-          <Overview domain={domain} />
+          <Overview domain={domain} refetch={refetch} />
         </div>
       </Tab>
       <Tab linkId="networking" title="Networking">

@@ -16,7 +16,7 @@
 import { Table, SimpleRow, TBody } from "../Table";
 import StateControl from "../StateControl";
 
-const Overview = ({ domain }) => {
+const Overview = ({ domain, refetch }) => {
   let state = undefined;
   if (domain.state) {
     state = domain.state.string;
@@ -32,7 +32,9 @@ const Overview = ({ domain }) => {
             loaderType="spinner"
             domain={domain}
             startElement={<i className="material-icons">play_arrow</i>}
+            onStart={refetch}
             shutdownElement={<i className="material-icons">stop</i>}
+            onShutdown={refetch}
           />
 
           <div className="flex">

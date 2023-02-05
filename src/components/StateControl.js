@@ -24,15 +24,17 @@ const StateControl = ({
   loaderType,
   domain,
   className,
-  shutdownElement,
   startElement,
+  onStart,
+  shutdownElement,
+  onShutdown,
 }) => {
   const session = useSelector((state) => state.session);
   const dispatch = useDispatch();
 
   const [isLoading, setLoading] = useState(false);
 
-  const onStart = (event) => {
+  const onStart_ = (event) => {
     event.stopPropagation();
 
     setLoading(true);
@@ -40,6 +42,7 @@ const StateControl = ({
       .then((json) => {
         console.log(json);
         dispatch(setVirtDomain(json));
+        onStart();
         setLoading(false);
       })
       .catch((error) => {
@@ -48,13 +51,14 @@ const StateControl = ({
       });
   };
 
-  const onShutdown = (event) => {
+  const onShutdown_ = (event) => {
     event.stopPropagation();
 
     setLoading(true);
     apiRequest(`domains/${domain.name}/shutdown`, "POST", session)
       .then((json) => {
         dispatch(setVirtDomain(json));
+        onShutdown();
         setLoading(false);
       })
       .catch((error) => {
@@ -76,7 +80,7 @@ const StateControl = ({
           <button
             className="waves-effect red lighten-2 btn"
             data-testid="start-submit"
-            onClick={onStart}
+            onClick={onStart_}
           >
             {startElement}
           </button>
@@ -85,7 +89,7 @@ const StateControl = ({
           <button
             className="waves-effect red lighten-2 btn"
             data-testid="shutdown-submit"
-            onClick={onShutdown}
+            onClick={onShutdown_}
           >
             {shutdownElement}
           </button>
@@ -101,6 +105,8 @@ StateControl.defaultProps = {
   shutdownElement: "Shutdown",
   loaderType: "progress",
   className: "",
+  onStart: () => {},
+  onShutdown: () => {},
 };
 
 StateControl.propTypes = {
