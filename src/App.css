@@ -154,8 +154,8 @@ body {
   height: 36px;
 }
 
-.state-control .progress {
-  margin: 0px;
+.state-control .preloader {
+  margin-top: 14px;
 }
 
 .auth-component-wrapper > div > ul > li > a,
@@ -246,4 +246,31 @@ nav .brand-logo-wrapper {
 
 .overview h5 {
   margin-bottom: 4px;
+}
+
+.inline-loader {
+  display: inline-block;
+  position: relative;
+  width: 22.5px;
+  height: 22.5px;
+  text-align: center;
+}
+
+.inline-loader > div {
+  display: inline-block;
+  position: absolute;
+  top: 8px;
+}
+
+.inline-loader .material-icons {
+  font-size: 18px;
+}
+
+.inline-loader .preloader {
+  top: 0px;
+}
+
+.inline-loader .preloader-wrapper {
+  height: 16px;
+  width: 16px;
 }
