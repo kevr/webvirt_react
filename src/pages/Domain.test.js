@@ -37,6 +37,11 @@ const mockDomainDisk = (file, dev, bus) => ({
   },
   source: { file },
   target: { dev, bus },
+  block_info: {
+    capacity: 0,
+    allocation: 0,
+    physical: 0,
+  },
 });
 
 const mockDomainInterface = (name, model, macAddress) => ({

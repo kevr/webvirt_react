@@ -14,15 +14,23 @@
  * permissions and limitations under the License.
  */
 import { Table, THead, TBody, Row, Header, Column } from "../Table";
+import { getDiskSize } from "../../Util";
 
-const DiskRow = ({ disk }) => (
-  <Row data-testid="disk">
-    <Column>{disk.driver.type}</Column>
-    <Column>{disk.target.bus}</Column>
-    <Column>{`/dev/${disk.target.dev}`}</Column>
-    <Column>{disk.source.file.split("/").at(-1)}</Column>
-  </Row>
-);
+const DiskRow = ({ disk }) => {
+  const [alloc, allocUnit] = getDiskSize(disk.block_info.allocation);
+  const [cap, capUnit] = getDiskSize(disk.block_info.capacity);
+  const sourceBasename = disk.source.file.split("/").at(-1);
+  return (
+    <Row data-testid="disk">
+      <Column>{disk.driver.type}</Column>
+      <Column>{disk.target.bus}</Column>
+      <Column>{`/dev/${disk.target.dev}`}</Column>
+      <Column>{sourceBasename}</Column>
+      <Column>{`${alloc} ${allocUnit}`}</Column>
+      <Column>{`${cap} ${capUnit}`}</Column>
+    </Row>
+  );
+};
 
 const Storage = ({ domain }) => {
   let disks = [];
@@ -41,6 +49,8 @@ const Storage = ({ domain }) => {
                 <Header>Bus</Header>
                 <Header>Target</Header>
                 <Header>Source</Header>
+                <Header>Allocated</Header>
+                <Header>Capacity</Header>
               </Row>
             </THead>
 

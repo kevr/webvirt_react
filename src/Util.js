@@ -23,3 +23,33 @@ export const navigateLogin = (location, navigate) => {
   const uri = encodeURIComponent(location.pathname);
   return navigate(`/login?next=${uri}`);
 };
+
+export const getDiskSize = (kbytes) => {
+  let unit = "KB";
+
+  if (kbytes > 1024) {
+    // Convert to megabytes
+    unit = "MB";
+    kbytes = kbytes / 1024;
+  }
+
+  if (kbytes > 1024) {
+    // Convert to gigabytes
+    unit = "GB";
+    kbytes = kbytes / 1024;
+  }
+
+  if (kbytes > 1024) {
+    // Convert to terabytes
+    unit = "TB";
+    kbytes = kbytes / 1024;
+  }
+
+  if (kbytes > 1024) {
+    // Convert to petabytes
+    unit = "PB";
+    kbytes = kbytes / 1024;
+  }
+
+  return [kbytes.toFixed(1), unit];
+};
