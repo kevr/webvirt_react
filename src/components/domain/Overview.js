@@ -76,6 +76,20 @@ const Overview = ({ domain, refetch }) => {
           </Table>
         </div>
       </div>
+      <div className="row">
+        <div className="col s6">
+          <h5>Resources</h5>
+          <Table>
+            <TBody>
+              <SimpleRow title="vCPUs">{info.cpus}</SimpleRow>
+              <SimpleRow title="Memory">
+                {info.memory / 1024} / {info.maxMemory / 1024} MB
+              </SimpleRow>
+            </TBody>
+          </Table>
+        </div>
+        <div className="col s6"></div>
+      </div>
     </div>
   );
 };

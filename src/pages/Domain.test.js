@@ -50,9 +50,10 @@ const mockDomainInterface = (name, model, macAddress) => ({
   macAddress,
 });
 
-const mockDomainJson = (name, id, stateId) => ({
+const mockDomainJson = (name, title, id, stateId) => ({
   id: id,
   name: name,
+  title: title,
   state: {
     id: stateId,
     string: stateString(stateId),
@@ -93,7 +94,61 @@ test("Domain renders", async () => {
     })
   );
 
-  const domain = mockDomainJson("test", 1, VIR_DOMAIN_RUNNING);
+  const domain = mockDomainJson("test", "", 1, VIR_DOMAIN_RUNNING);
+  fetch
+    .mockReturnValueOnce(
+      Promise.resolve({
+        status: 200,
+        json: () =>
+          Promise.resolve({
+            user: "test",
+            access: "new_access_token",
+            refresh: "new_refresh_token",
+          }),
+      })
+    )
+    .mockReturnValue(
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve(domain),
+      })
+    );
+
+  await act(
+    async () =>
+      await render(
+        <Provider store={store}>
+          <HelmetProvider>
+            <QueryClientProvider client={queryClient}>
+              <RouterProvider router={router} />
+            </QueryClientProvider>
+          </HelmetProvider>
+        </Provider>
+      )
+  );
+
+  const iface = screen.getByTestId("interface");
+  expect(iface).toBeInTheDocument();
+
+  const disk = screen.getByTestId("disk");
+  expect(disk).toBeInTheDocument();
+});
+
+test("Domain renders custom title", async () => {
+  const router = createMemoryRouter(appRoutes, {
+    initialEntries: ["/domains/test"],
+  });
+
+  const store = createStore();
+  store.dispatch(
+    setSession({
+      user: "test",
+      access: "test_access",
+      refresh: "test_refresh",
+    })
+  );
+
+  const domain = mockDomainJson("test", "Custom Title", 1, VIR_DOMAIN_RUNNING);
   fetch
     .mockReturnValueOnce(
       Promise.resolve({

@@ -29,6 +29,22 @@ beforeEach(() => {
   queryClient = new QueryClient();
 });
 
+const mockDomain = (
+  name,
+  title = undefined,
+  id = -1,
+  stateId = VIR_DOMAIN_RUNNING,
+  stateStr = stateString(VIR_DOMAIN_RUNNING)
+) => ({
+  id: id,
+  name: name,
+  title: title,
+  state: {
+    id: stateId,
+    string: stateStr,
+  },
+});
+
 test("Dashboard gracefully fails", async () => {
   const router = createMemoryRouter(appRoutes, {
     initialEntries: ["/"],
@@ -71,21 +87,67 @@ test("Dashboard gracefully fails", async () => {
 });
 
 test("Dashboard renders domains", async () => {
-  const mockDomain = (
-    name,
-    id = -1,
-    stateId = VIR_DOMAIN_RUNNING,
-    stateStr = stateString(VIR_DOMAIN_RUNNING)
-  ) => ({
-    id: id,
-    name: name,
-    state: {
-      id: stateId,
-      string: stateStr,
-    },
-  });
   const domains = [
-    mockDomain("test_machine", 1),
+    mockDomain("test_machine", undefined, 1),
+    mockDomain("test_machine2", undefined, 2),
+  ];
+
+  fetch
+    .mockReturnValueOnce(
+      Promise.resolve({
+        status: 200,
+        json: () =>
+          Promise.resolve({
+            user: "test",
+            access: "new_access_token",
+            refresh: "new_refresh_token",
+          }),
+      })
+    )
+    .mockReturnValueOnce(
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve(domains),
+      })
+    );
+
+  const router = createMemoryRouter(appRoutes, {
+    initialEntries: ["/"],
+  });
+
+  const store = createStore();
+  store.dispatch(
+    setSession({
+      user: "test",
+      access: "test_access",
+      refresh: "test_refresh",
+    })
+  );
+
+  await act(
+    async () =>
+      await render(
+        <Provider store={store}>
+          <QueryClientProvider client={queryClient}>
+            <HelmetProvider>
+              <RouterProvider router={router} />
+            </HelmetProvider>
+          </QueryClientProvider>
+        </Provider>
+      )
+  );
+
+  expect(router.state.location.pathname).toBe("/");
+  const domainElements = screen.getAllByTestId("domain");
+  expect(domainElements.length).toBe(2);
+  const titles = screen.getAllByTestId("domain-title");
+  expect(titles[0].textContent).toBe("test_machine");
+  expect(titles[1].textContent).toBe("test_machine2");
+});
+
+test("Dashboard renders domains with custom titles", async () => {
+  const domains = [
+    mockDomain("test_machine", "Custom Title", 1),
     mockDomain("test_machine2", 2),
   ];
 
@@ -137,4 +199,7 @@ test("Dashboard renders domains", async () => {
   expect(router.state.location.pathname).toBe("/");
   const domainElements = screen.getAllByTestId("domain");
   expect(domainElements.length).toBe(2);
+
+  const titles = screen.getAllByTestId("domain-title");
+  expect(titles[0].textContent).toBe("Custom Title");
 });

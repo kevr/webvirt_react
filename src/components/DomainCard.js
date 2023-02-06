@@ -21,19 +21,26 @@ import config from "../Config.json";
 const DomainCard = ({ domain, uuid }) => {
   const color = config.stateColors.foreground[domain.state.string];
   const cardColor = config.stateColors.background[domain.state.string];
+
+  let tooltip = domain.name;
+  if (domain.title) {
+    tooltip = `${domain.title} (${domain.name})`;
+  }
+
+  const title = domain.title ? domain.title : domain.name;
+
   return (
     <div className="col s6 m4">
       <div className={`domain card ${cardColor}`} data-testid="domain">
-        <div
-          id={`domain-tooltip-${uuid}`}
-          data-tooltip-content={`${domain.name}: ${domain.state.string}`}
-        >
+        <div id={`domain-tooltip-${uuid}`} data-tooltip-content={tooltip}>
           <div className="card-content">
             <Link
               to={`/domains/${domain.name}`}
               className="grey-text text-darken-4"
             >
-              <span className="card-title">{domain.title || domain.name}</span>
+              <span className="card-title" data-testid="domain-title">
+                {title}
+              </span>
               <p style={{ display: "block", width: "110px" }}>
                 State: <span className={color}>{domain.state.string}</span>
               </p>

@@ -138,7 +138,7 @@ body {
 }
 
 .react-tooltip {
-  z-index: 1;
+  z-index: 100;
 }
 
 .domain.card {

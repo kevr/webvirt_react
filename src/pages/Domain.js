@@ -30,6 +30,7 @@ const Domain = () => {
 
   const { name } = useParams();
   const domain = useSelector((state) => state.virt.domains[name] || {});
+  const title = domain.title || name;
 
   const { isLoading, isError, data, error, refetch } = useQuery(
     ["domain", name],
@@ -38,7 +39,7 @@ const Domain = () => {
   );
 
   useEffect(() => {
-    dispatch(setAppTitle(`Domain - ${name}`));
+    dispatch(setAppTitle(`Domain - ${title}`));
 
     if (!isLoading) {
       if (!isError) {
@@ -48,7 +49,7 @@ const Domain = () => {
         navigate("/");
       }
     }
-  }, [name, dispatch, navigate, data, isLoading, isError]);
+  }, [title, name, dispatch, navigate, data, isLoading, isError]);
 
   const tabs = (
     <Tabs id="domain-tabs">
