@@ -13,7 +13,7 @@
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-import { act, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -194,6 +194,86 @@ test("Domain renders custom title", async () => {
 
   const disk = screen.getByTestId("disk");
   expect(disk).toBeInTheDocument();
+});
+
+test("Domain options can be changed", async () => {
+  const router = createMemoryRouter(appRoutes, {
+    initialEntries: ["/domains/test"],
+  });
+
+  const store = createStore();
+  store.dispatch(
+    setSession({
+      user: "test",
+      access: "test_access",
+      refresh: "test_refresh",
+    })
+  );
+
+  const domain = mockDomainJson("test", "", 1, VIR_DOMAIN_RUNNING);
+  fetch
+    .mockReturnValueOnce(
+      Promise.resolve({
+        status: 200,
+        json: () =>
+          Promise.resolve({
+            user: "test",
+            access: "new_access_token",
+            refresh: "new_refresh_token",
+          }),
+      })
+    )
+    .mockReturnValueOnce(
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve(domain),
+      })
+    );
+
+  await act(
+    async () =>
+      await render(
+        <Provider store={store}>
+          <HelmetProvider>
+            <QueryClientProvider client={queryClient}>
+              <RouterProvider router={router} />
+            </QueryClientProvider>
+          </HelmetProvider>
+        </Provider>
+      )
+  );
+
+  fetch.mockReturnValueOnce(
+    Promise.resolve({
+      status: 200,
+      json: () => Promise.resolve({ autostart: true }),
+    })
+  );
+
+  let checkbox = screen.getByTestId("autostart-checkbox");
+  await act(async () => await fireEvent.click(checkbox));
+
+  const done = screen.getByText("done");
+  expect(done).toBeInTheDocument();
+
+  fetch.mockReturnValueOnce(
+    Promise.resolve({
+      status: 500,
+      json: () =>
+        Promise.resolve({
+          detail: "Some crazy error",
+        }),
+    })
+  );
+
+  checkbox = screen.getByTestId("autostart-checkbox");
+  await act(async () => await fireEvent.click(checkbox));
+
+  const close = screen.getByText("close");
+  expect(close).toBeInTheDocument();
+
+  const error = screen.getByTestId("error");
+  expect(error).toBeInTheDocument();
 });
 
 test("Domain gracefully navigates to /", async () => {

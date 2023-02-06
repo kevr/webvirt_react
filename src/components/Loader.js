@@ -56,7 +56,7 @@ const Loader = ({ type, label, loading, children }) => {
     return (
       <FlexCentered>
         <div>
-          <p className="text-center">{label}</p>
+          {label && <p className="text-center">{label}</p>}
           {loader}
         </div>
       </FlexCentered>

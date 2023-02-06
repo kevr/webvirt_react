@@ -59,6 +59,7 @@ const Checkbox = (props) => {
     <label>
       <input
         className="filled-in"
+        data-testid={props["data-testid"]}
         type="checkbox"
         checked={checked}
         onChange={onChange}
@@ -88,6 +89,10 @@ Checkbox.propTypes = {
   checked: PropTypes.bool.isRequired,
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
+};
+
+Checkbox.defaultProps = {
+  "data-testid": "",
 };
 
 export default Checkbox;

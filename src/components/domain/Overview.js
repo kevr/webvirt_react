@@ -13,11 +13,16 @@
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-import { Table, SimpleRow, TBody } from "../Table";
+import { useDispatch } from "react-redux";
+import { setVirtDomain } from "../../store/Actions";
+import { Table, SimpleRow, TBody, Row, Column } from "../Table";
 import StateControl from "../StateControl";
+import Checkbox from "../Checkbox";
 import config from "../../Config.json";
 
 const Overview = ({ domain, refetch }) => {
+  const dispatch = useDispatch();
+
   let state = undefined;
   let stateColor = "";
   if (domain.state) {
@@ -90,7 +95,30 @@ const Overview = ({ domain, refetch }) => {
             </TBody>
           </Table>
         </div>
-        <div className="col s6"></div>
+        <div className="col s6">
+          <h5>Boot Options</h5>
+          <div>
+            <Table>
+              <TBody>
+                <Row>
+                  <Column>
+                    <Checkbox
+                      data-testid="autostart-checkbox"
+                      endpoint={`domains/${domain.name}/autostart`}
+                      checked={domain.autostart || false}
+                      label="Autostart"
+                      onChange={(data) => {
+                        dispatch(
+                          setVirtDomain(Object.assign({}, domain, data))
+                        );
+                      }}
+                    />
+                  </Column>
+                </Row>
+              </TBody>
+            </Table>
+          </div>
+        </div>
       </div>
     </div>
   );
