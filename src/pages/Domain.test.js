@@ -60,8 +60,8 @@ const mockDomainJson = (name, title, id, stateId) => ({
   },
   info: {
     cpus: 2,
-    maxMemory: 1024 * 1000,
-    memory: 1024 * 1000,
+    maxMemory: 1024 * 1024,
+    memory: 1024 * 1024,
     os: {
       type: {
         arch: "x86_64",
@@ -127,11 +127,19 @@ test("Domain renders", async () => {
       )
   );
 
+  // Expect a network interface to be displayed
   const iface = screen.getByTestId("interface");
   expect(iface).toBeInTheDocument();
 
+  // Expect a disk to be displayed
   const disk = screen.getByTestId("disk");
   expect(disk).toBeInTheDocument();
+
+  // Expect Resources to be displayed
+  const vcpus = screen.getByTestId("resources-vcpus-value");
+  expect(vcpus.textContent).toBe("2");
+  const memory = screen.getByTestId("resources-memory-value");
+  expect(memory.textContent).toBe("1024 / 1024 MB");
 });
 
 test("Domain renders custom title", async () => {

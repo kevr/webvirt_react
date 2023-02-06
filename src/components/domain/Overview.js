@@ -81,8 +81,10 @@ const Overview = ({ domain, refetch }) => {
           <h5>Resources</h5>
           <Table>
             <TBody>
-              <SimpleRow title="vCPUs">{info.cpus}</SimpleRow>
-              <SimpleRow title="Memory">
+              <SimpleRow title="vCPUs" data-testid="resources-vcpus">
+                {info.cpus}
+              </SimpleRow>
+              <SimpleRow title="Memory" data-testid="resources-memory">
                 {info.memory / 1024} / {info.maxMemory / 1024} MB
               </SimpleRow>
             </TBody>

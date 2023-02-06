@@ -17,16 +17,22 @@ import PropTypes from "prop-types";
 
 const propTypes = {
   className: PropTypes.string,
+  "data-testid": PropTypes.string,
 };
 
 const defaultProps = {
   className: "",
+  "data-testid": "",
 };
 
-export const Table = ({ id, className, children }) => {
+export const Table = (props) => {
   return (
-    <table id={id} className={className}>
-      {children}
+    <table
+      data-testid={props["data-testid"]}
+      id={props.id}
+      className={props.className}
+    >
+      {props.children}
     </table>
   );
 };
@@ -39,14 +45,11 @@ Table.defaultProps = Object.assign({}, defaultProps, { id: "" });
 export const THead = ({ children }) => <thead>{children}</thead>;
 export const TBody = ({ children }) => <tbody>{children}</tbody>;
 
-export const Row = (props) => {
-  const testId = props["data-testid"];
-  return (
-    <tr data-testid={testId} className={props.className}>
-      {props.children}
-    </tr>
-  );
-};
+export const Row = (props) => (
+  <tr data-testid={props["data-testid"]} className={props.className}>
+    {props.children}
+  </tr>
+);
 
 Row.propTypes = propTypes;
 Row.defaultProps = defaultProps;
@@ -58,23 +61,22 @@ export const Header = ({ className, children }) => (
 Header.propTypes = propTypes;
 Header.defaultProps = defaultProps;
 
-export const Column = (props) => {
-  const testId = props["data-testid"];
-  return (
-    <td data-testid={testId} className={props.className}>
-      {props.children}
-    </td>
-  );
-};
+export const Column = (props) => (
+  <td data-testid={props["data-testid"]} className={props.className}>
+    {props.children}
+  </td>
+);
 
 Column.propTypes = propTypes;
 Column.defaultProps = defaultProps;
 
-export const SimpleRow = ({ title, className, children }) => {
+export const SimpleRow = (props) => {
   return (
-    <Row>
-      <Column>{title}</Column>
-      <Column>{children}</Column>
+    <Row data-testid={props["data-testid"]}>
+      <Column>{props.title}</Column>
+      <Column data-testid={props["data-testid"] + "-value"}>
+        {props.children}
+      </Column>
     </Row>
   );
 };
