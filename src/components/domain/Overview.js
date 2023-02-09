@@ -18,6 +18,7 @@ import { setVirtDomain } from "../../store/Actions";
 import { Table, SimpleRow, TBody, Row, Column } from "../Table";
 import StateControl from "../StateControl";
 import Checkbox from "../Checkbox";
+import TextInput from "./TextInput";
 import config from "../../Config.json";
 
 const Overview = ({ domain, refetch }) => {
@@ -59,8 +60,24 @@ const Overview = ({ domain, refetch }) => {
               <SimpleRow title="State">
                 <span className={stateColor}>{state}</span>
               </SimpleRow>
-              <SimpleRow title="Title">{domain.title}</SimpleRow>
-              <SimpleRow title="Description">{domain.description}</SimpleRow>
+              <SimpleRow title="Title">
+                <TextInput
+                  name="title"
+                  domainEndpoint="metadata"
+                  value={domain.title || ""}
+                  domain={domain}
+                  refetch={refetch}
+                />
+              </SimpleRow>
+              <SimpleRow title="Description">
+                <TextInput
+                  name="description"
+                  domainEndpoint="metadata"
+                  value={domain.description || ""}
+                  domain={domain}
+                  refetch={refetch}
+                />
+              </SimpleRow>
             </TBody>
           </Table>
         </div>

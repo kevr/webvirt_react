@@ -274,3 +274,11 @@ nav .brand-logo-wrapper {
   height: 16px;
   width: 16px;
 }
+
+.overview table input[type="text"] {
+  width: 80%;
+}
+
+.overview .input-field {
+  margin: 0;
+}
