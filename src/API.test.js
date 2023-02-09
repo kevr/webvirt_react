@@ -13,7 +13,7 @@
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-import { apiRequest, stateString } from "./API";
+import { apiRequest, handleFetch, stateString } from "./API";
 
 test("stateString throws with unknown id", () => {
   expect(() => stateString(999)).toThrow();
@@ -34,6 +34,23 @@ test("apiRequest defaults", async () => {
 
   const json = await apiRequest("abc");
   expect(json.key).toBe("my_data");
+  expect(fetch).toHaveBeenCalledTimes(1);
+  expect(options.method).toBe("GET");
+  expect(options.body).toBe(undefined);
+});
+
+test("handleFetch default error data", async () => {
+  let options;
+  fetch.mockImplementationOnce((url, opts) => {
+    options = opts;
+    return Promise.reject({
+      status: 500,
+    });
+  });
+
+  await handleFetch(apiRequest("abc")).catch((error) => {
+    expect(error.data.detail).toBe("Unable to contact API");
+  });
   expect(fetch).toHaveBeenCalledTimes(1);
   expect(options.method).toBe("GET");
   expect(options.body).toBe(undefined);

@@ -17,12 +17,21 @@ import config from "./Config";
 
 export const apiEndpoint = (endpoint) => `${config.apiPrefix}/${endpoint}/`;
 
-const handleFetch = (fn) => {
+export const handleFetch = (fn) => {
   return fn
     .then(async (response) => {
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (Exception) {
+        data = {};
+      }
 
-      if (response.status !== 200 && response.status !== 201) {
+      // Whitelisted HTTP status codes
+      const whiteListed = [200, 201, 304];
+
+      const found = whiteListed.find((value) => value === response.status);
+      if (found === undefined) {
         return Promise.reject({
           status: response.status,
           data: data,
