@@ -13,22 +13,26 @@
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { apiRequest } from "../../API";
-import { setVirtDomain } from "../../store/Actions";
 import Loader from "../Loader";
 import Error from "../Error";
 
 const TextInput = (props) => {
   const session = useSelector((state) => state.session);
-  const dispatch = useDispatch();
 
   const [isChanged, setChanged] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isError, setError] = useState(false);
   const [value, setValue] = useState(props.value);
+
+  const valueProp = props.value;
+  useEffect(() => {
+    // Update value state when props.value changes
+    setValue(valueProp);
+  }, [valueProp]);
 
   const onBlur = (value) => {
     const endpoint = `domains/${props.domain.name}/${props.domainEndpoint}`;
@@ -38,10 +42,10 @@ const TextInput = (props) => {
     setLoading(true);
     setChanged(true);
     apiRequest(endpoint, "post", session, JSON.stringify(data))
-      .then((data) => {
+      .then(async (data) => {
         console.log(data);
-        dispatch(setVirtDomain(Object.assign({}, props.domain, data)));
-        props.refetch();
+        // dispatch(setVirtDomain(Object.assign({}, props.domain, data)));
+        await props.refetch();
         setError(false);
         setLoading(false);
       })

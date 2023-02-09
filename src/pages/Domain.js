@@ -44,11 +44,9 @@ const Domain = () => {
 
     if (!isLoading) {
       if (!isError) {
-        if (!isLoaded) {
-          setLoaded(true);
-          dispatch(setVirtDomain(data));
-          dispatch(setAppTitle(`Domain - ${data.title || name}`));
-        }
+        setLoaded(true);
+        dispatch(setVirtDomain(data));
+        dispatch(setAppTitle(`Domain - ${data.title || name}`));
       } else {
         navigate("/");
       }

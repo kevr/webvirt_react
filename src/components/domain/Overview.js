@@ -62,15 +62,17 @@ const Overview = ({ domain, refetch }) => {
               </SimpleRow>
               <SimpleRow title="Title">
                 <TextInput
+                  data-testid="title-input"
                   name="title"
                   domainEndpoint="metadata"
-                  value={domain.title || ""}
+                  value={domain.title}
                   domain={domain}
                   refetch={refetch}
                 />
               </SimpleRow>
               <SimpleRow title="Description">
                 <TextInput
+                  data-testid="description-input"
                   name="description"
                   domainEndpoint="metadata"
                   value={domain.description || ""}

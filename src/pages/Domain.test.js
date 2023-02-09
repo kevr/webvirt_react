@@ -107,7 +107,7 @@ test("Domain renders", async () => {
           }),
       })
     )
-    .mockReturnValue(
+    .mockReturnValueOnce(
       Promise.resolve({
         status: 200,
         json: () => Promise.resolve(domain),
@@ -140,6 +140,23 @@ test("Domain renders", async () => {
   expect(vcpus.textContent).toBe("2");
   const memory = screen.getByTestId("resources-memory-value");
   expect(memory.textContent).toBe("1024 / 1024 MB");
+
+  domain["title"] = "Test Title";
+  fetch.mockReturnValueOnce(
+    Promise.resolve({
+      status: 200,
+      json: () => Promise.resolve(domain),
+    })
+  );
+
+  const input = screen.getByTestId("title-input");
+  expect(input).toBeInTheDocument();
+
+  await act(
+    async () =>
+      await fireEvent.input(input, { target: { value: "Test Title" } })
+  );
+  await act(async () => await fireEvent.blur(input));
 });
 
 test("Domain renders custom title", async () => {

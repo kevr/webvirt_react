@@ -41,7 +41,7 @@ const StateControl = ({
     apiRequest(`domains/${domain.name}/start`, "POST", session)
       .then((json) => {
         console.log(json);
-        dispatch(setVirtDomain(json));
+        dispatch(setVirtDomain(Object.assign({}, domain, json)));
         onStart();
         setLoading(false);
       })
@@ -57,7 +57,7 @@ const StateControl = ({
     setLoading(true);
     apiRequest(`domains/${domain.name}/shutdown`, "POST", session)
       .then((json) => {
-        dispatch(setVirtDomain(json));
+        dispatch(setVirtDomain(Object.assign({}, domain, json)));
         onShutdown();
         setLoading(false);
       })
