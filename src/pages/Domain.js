@@ -32,6 +32,7 @@ const Domain = () => {
   const domain = useSelector((state) => state.virt.domains[name] || {});
   const title = domain.title || name;
 
+  const [isLoaded, setLoaded] = useState(false);
   const { isLoading, isError, data, error, refetch } = useQuery(
     ["domain", name],
     () => apiRequest(`domains/${name}`, "get", session),
@@ -43,8 +44,11 @@ const Domain = () => {
 
     if (!isLoading) {
       if (!isError) {
-        dispatch(setVirtDomain(data));
-        dispatch(setAppTitle(`Domain - ${data.title || name}`));
+        if (!isLoaded) {
+          setLoaded(true);
+          dispatch(setVirtDomain(data));
+          dispatch(setAppTitle(`Domain - ${data.title || name}`));
+        }
       } else {
         navigate("/");
       }
