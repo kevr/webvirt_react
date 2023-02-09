@@ -60,10 +60,10 @@ test("TextInput updates", async () => {
   const input = screen.getByTestId("input");
   expect(input).toBeInTheDocument();
 
-  await act(async () => {
-    await fireEvent.input(input, { target: { value: "test" } });
-    await fireEvent.blur(input);
-  });
+  await act(
+    async () => await fireEvent.input(input, { target: { value: "test" } })
+  );
+  await act(async () => await fireEvent.blur(input));
 
   expect(refetched).toBe(true);
 });
@@ -103,10 +103,10 @@ test("TextInput update fails", async () => {
   const input = screen.getByTestId("input");
   expect(input).toBeInTheDocument();
 
-  await act(async () => {
-    await fireEvent.input(input, { target: { value: "test" } });
-    await fireEvent.blur(input);
-  });
+  await act(
+    async () => await fireEvent.input(input, { target: { value: "test" } })
+  );
+  await act(async () => await fireEvent.blur(input));
 
   expect(refetched).toBe(false);
 

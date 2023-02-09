@@ -53,7 +53,7 @@ const Domain = () => {
         navigate("/");
       }
     }
-  }, [title, name, dispatch, navigate, data, isLoading, isError]);
+  }, [isLoaded, title, name, dispatch, navigate, data, isLoading, isError]);
 
   const tabs = (
     <Tabs id="domain-tabs">

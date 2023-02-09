@@ -48,9 +48,11 @@ test("handleFetch default error data", async () => {
     });
   });
 
-  await handleFetch(apiRequest("abc")).catch((error) => {
-    expect(error.data.detail).toBe("Unable to contact API");
+  let error;
+  await handleFetch(apiRequest("abc")).catch((error_) => {
+    error = error_;
   });
+  expect(error.data.detail).toBe("Unable to contact API");
   expect(fetch).toHaveBeenCalledTimes(1);
   expect(options.method).toBe("GET");
   expect(options.body).toBe(undefined);
