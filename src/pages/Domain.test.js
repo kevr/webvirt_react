@@ -30,13 +30,17 @@ beforeEach(() => {
 });
 
 const mockDomainDisk = (file, dev, bus) => ({
-  device: "disk",
-  driver: {
-    name: "qemu",
-    type: "sata",
+  attrib: {
+    device: "disk",
   },
-  source: { file },
-  target: { dev, bus },
+  driver: {
+    attrib: {
+      name: "qemu",
+      type: "sata",
+    },
+  },
+  source: { attrib: { file } },
+  target: { attrib: { dev, bus } },
   block_info: {
     capacity: 0,
     allocation: 0,
@@ -44,10 +48,17 @@ const mockDomainDisk = (file, dev, bus) => ({
   },
 });
 
-const mockDomainInterface = (name, model, macAddress) => ({
-  name,
-  model,
-  macAddress,
+const mockDomainInterface = (name, type, address) => ({
+  alias: {
+    attrib: { name },
+  },
+  attrib: { type: "user" },
+  mac: {
+    attrib: { address },
+  },
+  model: {
+    attrib: { type },
+  },
 });
 
 const mockDomainJson = (name, title, id, stateId) => ({
@@ -64,21 +75,30 @@ const mockDomainJson = (name, title, id, stateId) => ({
     memory: 1024 * 1024,
     os: {
       type: {
-        arch: "x86_64",
-        machine: "pc-q35-7.2",
+        attrib: {
+          arch: "x86_64",
+          machine: "pc-q35-7.2",
+        },
       },
       boot: {
-        dev: "hd",
+        attrib: {
+          dev: "hd",
+        },
       },
       bootmenu: {
-        enable: false,
+        attrib: {
+          enable: "no",
+        },
       },
     },
     devices: {
-      disks: [mockDomainDisk("disk.qcow", "vda", "virtio")],
-      interfaces: [
+      disk: [mockDomainDisk("disk.qcow", "vda", "virtio")],
+      interface: [
         mockDomainInterface("net0", "virtio", "aa:bb:cc:dd:11:22:33:44"),
       ],
+      emulator: {
+        text: "qemu-system-x86_64",
+      },
     },
   },
 });
@@ -344,7 +364,7 @@ test("Domain options can be changed", async () => {
   );
 
   // Change "Enable boot menu" state.
-  domain.info.os.bootmenu.enable = true;
+  domain.info.os.bootmenu.attrib.enable = "yes";
   fetch
     .mockReturnValueOnce(
       Promise.resolve({

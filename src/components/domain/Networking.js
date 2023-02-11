@@ -18,17 +18,18 @@ import { Table, THead, TBody, Row, Header, Column } from "../Table";
 const NetworkRow = ({ network }) => (
   <Row data-testid="interface">
     <Column data-testid="interface-name">
-      {network.name || "(unassigned)"}
+      {network.alias ? network.alias.attrib.name : "(unassigned)"}
     </Column>
-    <Column data-testid="interface-model">{network.model}</Column>
-    <Column data-testid="interface-mac">{network.macAddress}</Column>
+    <Column data-testid="interface-type">{network.attrib.type}</Column>
+    <Column data-testid="interface-model">{network.model.attrib.type}</Column>
+    <Column data-testid="interface-mac">{network.mac.attrib.address}</Column>
   </Row>
 );
 
 const Networking = ({ domain }) => {
   let networks = [];
   if (domain.info !== undefined) {
-    networks = domain.info.devices.interfaces;
+    networks = domain.info.devices["interface"];
   }
 
   return (
@@ -39,6 +40,7 @@ const Networking = ({ domain }) => {
             <THead>
               <Row>
                 <Header>Name</Header>
+                <Header>Type</Header>
                 <Header>Model</Header>
                 <Header>MAC</Header>
               </Row>

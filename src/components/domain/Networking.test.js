@@ -20,11 +20,15 @@ test("Networking renders unassigned name", async () => {
   const domain = {
     info: {
       devices: {
-        interfaces: [
+        interface: [
           {
-            name: "",
-            model: "virtio",
-            macAddress: "aa:bb:cc:dd:11:22:33:44",
+            attrib: { type: "user" },
+            model: {
+              attrib: { type: "virtio" },
+            },
+            mac: {
+              attrib: { address: "aa:bb:cc:dd:11:22:33:44" },
+            },
           },
         ],
       },

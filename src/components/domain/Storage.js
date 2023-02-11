@@ -19,12 +19,12 @@ import { getDiskSize } from "../../Util";
 const DiskRow = ({ disk }) => {
   const [alloc, allocUnit] = getDiskSize(disk.block_info.allocation);
   const [cap, capUnit] = getDiskSize(disk.block_info.capacity);
-  const sourceBasename = disk.source.file.split("/").at(-1);
+  const sourceBasename = disk.source.attrib.file.split("/").at(-1);
   return (
     <Row data-testid="disk">
-      <Column>{disk.driver.type}</Column>
-      <Column>{disk.target.bus}</Column>
-      <Column>{`/dev/${disk.target.dev}`}</Column>
+      <Column>{disk.driver.attrib.type}</Column>
+      <Column>{disk.target.attrib.bus}</Column>
+      <Column>{`/dev/${disk.target.attrib.dev}`}</Column>
       <Column>{sourceBasename}</Column>
       <Column>{`${alloc} ${allocUnit}`}</Column>
       <Column>{`${cap} ${capUnit}`}</Column>
@@ -34,14 +34,22 @@ const DiskRow = ({ disk }) => {
 
 const Storage = ({ domain }) => {
   let disks = [];
+  let cdroms = [];
   if (domain.info) {
-    disks = domain.info.devices.disks.filter((disk) => disk.device === "disk");
+    disks = domain.info.devices.disk.filter(
+      (disk) => disk.attrib.device === "disk"
+    );
+    cdroms = domain.info.devices.disk.filter(
+      (disk) => disk.attrib.device === "cdrom"
+    );
+    console.log(cdroms);
   }
 
   return (
     <div className="container">
       <div className="row">
         <div className="col s12">
+          <h5>Disks</h5>
           <Table>
             <THead>
               <Row>
@@ -57,6 +65,33 @@ const Storage = ({ domain }) => {
             <TBody>
               {disks.map((disk, index) => (
                 <DiskRow key={index} disk={disk} />
+              ))}
+            </TBody>
+          </Table>
+        </div>
+        <div className="col s12">
+          <h5>CDRs</h5>
+          <Table>
+            <THead>
+              <Row>
+                <Header>Driver</Header>
+                <Header>Bus</Header>
+                <Header>Target</Header>
+                <Header>Source</Header>
+              </Row>
+            </THead>
+            <TBody>
+              {cdroms.map((cdrom, index) => (
+                <Row key={index}>
+                  <Column>{cdrom.driver.attrib.type}</Column>
+                  <Column>{cdrom.target.attrib.bus}</Column>
+                  <Column>{`/dev/${cdrom.target.attrib.dev}`}</Column>
+                  {cdrom.source && (
+                    <Column>
+                      {cdrom.source.attrib.file.split("/").at(-1)}
+                    </Column>
+                  )}
+                </Row>
               ))}
             </TBody>
           </Table>

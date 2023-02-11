@@ -13,18 +13,13 @@
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-import { useDispatch } from "react-redux";
-import { setVirtDomain } from "../../store/Actions";
-import { Table, SimpleRow, TBody, Row, Column } from "../Table";
+import { Table, SimpleRow, TBody } from "../Table";
 import StateControl from "../StateControl";
-import Checkbox from "../Checkbox";
 import TextInput from "./TextInput";
-import { VIR_DOMAIN_RUNNING } from "../../API";
+import Boot from "./Boot";
 import config from "../../Config.json";
 
 const Overview = ({ domain, refetch }) => {
-  const dispatch = useDispatch();
-
   const state = domain.state || {};
   let stateColor = "";
   if (domain.state) {
@@ -32,8 +27,12 @@ const Overview = ({ domain, refetch }) => {
   }
 
   const info = domain.info || {
-    devices: {},
-    os: { boot: {}, type: {}, bootmenu: { enable: false } },
+    devices: { emulator: "", disk: [], interface: [] },
+    os: {
+      boot: { attrib: {} },
+      type: { attrib: {} },
+      bootmenu: { attrib: { enable: false } },
+    },
   };
 
   return (
@@ -92,13 +91,17 @@ const Overview = ({ domain, refetch }) => {
           <Table>
             <TBody>
               <SimpleRow title="Hypervisor">{domain.type}</SimpleRow>
-              <SimpleRow title="Architecture">{info.os.type.arch}</SimpleRow>
-              <SimpleRow title="Emulator">
-                {(info.devices.emulator || "").split("/").at(-1)}
+              <SimpleRow title="Architecture">
+                {info.os.type.attrib.arch}
               </SimpleRow>
-              <SimpleRow title="Chipset">{info.os.type.machine}</SimpleRow>
+              <SimpleRow title="Emulator">
+                {info.devices.emulator.text}
+              </SimpleRow>
+              <SimpleRow title="Chipset">
+                {info.os.type.attrib.machine}
+              </SimpleRow>
               <SimpleRow title="Firmware">
-                {info.os.boot.dev === "hd" ? "BIOS" : "EFI"}
+                {info.os.boot.attrib.dev === "hd" ? "BIOS" : "EFI"}
               </SimpleRow>
             </TBody>
           </Table>
@@ -121,48 +124,7 @@ const Overview = ({ domain, refetch }) => {
         <div className="col s6">
           <h5>Boot Options</h5>
           <div>
-            <Table>
-              <TBody>
-                <Row>
-                  <Column>
-                    <Checkbox
-                      data-testid="autostart-checkbox"
-                      endpoint={`domains/${domain.name}/autostart`}
-                      checked={domain.autostart || false}
-                      label="Autostart"
-                      onChange={(data) => {
-                        dispatch(
-                          setVirtDomain(Object.assign({}, domain, data))
-                        );
-                      }}
-                    />
-                  </Column>
-                </Row>
-                <Row>
-                  <Column>
-                    <Checkbox
-                      data-testid="bootmenu-checkbox"
-                      endpoint={`domains/${domain.name}/bootmenu`}
-                      checked={info.os.bootmenu.enable}
-                      label="Enable boot menu"
-                      disabled={state.id === VIR_DOMAIN_RUNNING}
-                      disabledText="disabled while running"
-                      onChange={(data) => {
-                        dispatch(
-                          setVirtDomain(
-                            Object.assign({}, domain, {
-                              info: Object.assign({}, info, {
-                                os: data,
-                              }),
-                            })
-                          )
-                        );
-                      }}
-                    />
-                  </Column>
-                </Row>
-              </TBody>
-            </Table>
+            <Boot domain={domain} />
           </div>
         </div>
       </div>
