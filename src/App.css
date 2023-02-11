@@ -287,3 +287,12 @@ nav .brand-logo-wrapper {
   padding-bottom: 0px;
   padding-top: 0px;
 }
+
+.text-input-column > div > input[type="text"] {
+  margin-bottom: 0px !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.checkbox-column {
+  padding-bottom: 8px;
+}

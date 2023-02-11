@@ -36,6 +36,7 @@ const Networking = ({ domain }) => {
     <div className="container">
       <div className="row">
         <div className="col s12">
+          <h5>Interfaces</h5>
           <Table>
             <THead>
               <Row>

@@ -44,7 +44,7 @@ const Boot = ({ domain }) => {
     <Table>
       <TBody>
         <Row>
-          <Column>
+          <Column className="checkbox-column">
             <Checkbox
               data-testid="autostart-checkbox"
               endpoint={`domains/${domain.name}/autostart`}
@@ -58,7 +58,7 @@ const Boot = ({ domain }) => {
           </Column>
         </Row>
         <Row>
-          <Column>
+          <Column className="checkbox-column">
             <Checkbox
               data-testid="bootmenu-checkbox"
               endpoint={`domains/${domain.name}/bootmenu`}
