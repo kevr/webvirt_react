@@ -282,3 +282,8 @@ nav .brand-logo-wrapper {
 .overview .input-field {
   margin: 0;
 }
+
+.text-input-column {
+  padding-bottom: 0px;
+  padding-top: 0px;
+}

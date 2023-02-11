@@ -20,7 +20,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { HelmetProvider } from "react-helmet-async";
 import { createStore } from "../store";
 import { setSession } from "../store/Actions";
-import { stateString, VIR_DOMAIN_RUNNING } from "../API";
+import { stateString, VIR_DOMAIN_RUNNING, VIR_DOMAIN_SHUTOFF } from "../API";
 import { appRoutes } from "../Routing";
 
 let queryClient = new QueryClient();
@@ -69,6 +69,9 @@ const mockDomainJson = (name, title, id, stateId) => ({
       },
       boot: {
         dev: "hd",
+      },
+      bootmenu: {
+        enable: false,
       },
     },
     devices: {
@@ -142,12 +145,22 @@ test("Domain renders", async () => {
   expect(memory.textContent).toBe("1024 / 1024 MB");
 
   domain["title"] = "Test Title";
-  fetch.mockReturnValueOnce(
-    Promise.resolve({
-      status: 200,
-      json: () => Promise.resolve(domain),
-    })
-  );
+  fetch
+    .mockReturnValueOnce(
+      Promise.resolve({
+        status: 200,
+        json: () =>
+          Promise.resolve({
+            title: "Test Title",
+          }),
+      })
+    )
+    .mockReturnValueOnce(
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve(domain),
+      })
+    );
 
   const input = screen.getByTestId("title-input");
   expect(input).toBeInTheDocument();
@@ -214,6 +227,7 @@ test("Domain renders custom title", async () => {
 });
 
 test("Domain options can be changed", async () => {
+  console.log("2LAST");
   const router = createMemoryRouter(appRoutes, {
     initialEntries: ["/domains/test"],
   });
@@ -247,7 +261,7 @@ test("Domain options can be changed", async () => {
       })
     );
 
-  await act(
+  const { rerender } = await act(
     async () =>
       await render(
         <Provider store={store}>
@@ -260,6 +274,7 @@ test("Domain options can be changed", async () => {
       )
   );
 
+  // Test that autostart-checkbox can be clicked and results in a "done" icon.
   fetch.mockReturnValueOnce(
     Promise.resolve({
       status: 200,
@@ -291,6 +306,77 @@ test("Domain options can be changed", async () => {
 
   const error = screen.getByTestId("error");
   expect(error).toBeInTheDocument();
+
+  expect(
+    screen.getByTestId("bootmenu-checkbox-label-annotation").textContent
+  ).toBe("(disabled while running)");
+
+  // Render a new domain view with Shutoff state.
+  domain.state.id = VIR_DOMAIN_SHUTOFF;
+  domain.state.string = stateString(VIR_DOMAIN_SHUTOFF);
+  fetch
+    .mockReturnValueOnce(
+      Promise.resolve({
+        status: 200,
+        json: () =>
+          Promise.resolve({
+            user: "test",
+            access: "new_access_token",
+            refresh: "new_refresh_token",
+          }),
+      })
+    )
+    .mockReturnValueOnce(
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve(domain),
+      })
+    );
+
+  rerender(
+    <Provider store={store}>
+      <HelmetProvider>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
+      </HelmetProvider>
+    </Provider>
+  );
+
+  // Change "Enable boot menu" state.
+  domain.info.os.bootmenu.enable = true;
+  fetch
+    .mockReturnValueOnce(
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve(domain.info.os),
+      })
+    )
+    .mockReturnValueOnce(
+      Promise.resolve({
+        json: () => Promise.resolve(domain),
+      })
+    );
+
+  rerender(
+    <Provider store={store}>
+      <HelmetProvider>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
+      </HelmetProvider>
+    </Provider>
+  );
+
+  expect(
+    screen.queryByTestId("bootmenu-checkbox-label-annotation")
+  ).not.toBeInTheDocument();
+
+  checkbox = screen.getByTestId("bootmenu-checkbox");
+  await act(async () => await fireEvent.click(checkbox));
+
+  checkbox = screen.getByTestId("bootmenu-checkbox");
+  expect(checkbox.checked).toEqual(true);
 });
 
 test("Domain gracefully navigates to /", async () => {

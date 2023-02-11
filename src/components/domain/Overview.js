@@ -19,19 +19,23 @@ import { Table, SimpleRow, TBody, Row, Column } from "../Table";
 import StateControl from "../StateControl";
 import Checkbox from "../Checkbox";
 import TextInput from "./TextInput";
+import { VIR_DOMAIN_RUNNING } from "../../API";
 import config from "../../Config.json";
 
 const Overview = ({ domain, refetch }) => {
   const dispatch = useDispatch();
 
-  let state = undefined;
+  const state = domain.state || {};
   let stateColor = "";
   if (domain.state) {
-    state = domain.state.string;
-    stateColor = config.stateColors.foreground[state];
+    stateColor = config.stateColors.foreground[domain.state.id];
   }
 
-  const info = domain.info || { devices: {}, os: { boot: {}, type: {} } };
+  const info = domain.info || {
+    devices: {},
+    os: { boot: {}, type: {}, bootmenu: { enable: false } },
+  };
+
   return (
     <div className="overview container">
       <div className="row">
@@ -58,9 +62,9 @@ const Overview = ({ domain, refetch }) => {
               <SimpleRow title="Name">{domain.name}</SimpleRow>
               <SimpleRow title="UUID">{domain.uuid}</SimpleRow>
               <SimpleRow title="State">
-                <span className={stateColor}>{state}</span>
+                <span className={stateColor}>{state.string}</span>
               </SimpleRow>
-              <SimpleRow title="Title">
+              <SimpleRow title="Title" className="text-input-column">
                 <TextInput
                   data-testid="title-input"
                   name="title"
@@ -70,7 +74,7 @@ const Overview = ({ domain, refetch }) => {
                   refetch={refetch}
                 />
               </SimpleRow>
-              <SimpleRow title="Description">
+              <SimpleRow title="Description" className="text-input-column">
                 <TextInput
                   data-testid="description-input"
                   name="description"
@@ -129,6 +133,29 @@ const Overview = ({ domain, refetch }) => {
                       onChange={(data) => {
                         dispatch(
                           setVirtDomain(Object.assign({}, domain, data))
+                        );
+                      }}
+                    />
+                  </Column>
+                </Row>
+                <Row>
+                  <Column>
+                    <Checkbox
+                      data-testid="bootmenu-checkbox"
+                      endpoint={`domains/${domain.name}/bootmenu`}
+                      checked={info.os.bootmenu.enable}
+                      label="Enable boot menu"
+                      disabled={state.id === VIR_DOMAIN_RUNNING}
+                      disabledText="disabled while running"
+                      onChange={(data) => {
+                        dispatch(
+                          setVirtDomain(
+                            Object.assign({}, domain, {
+                              info: Object.assign({}, info, {
+                                os: data,
+                              }),
+                            })
+                          )
                         );
                       }}
                     />

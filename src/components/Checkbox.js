@@ -62,9 +62,20 @@ const Checkbox = (props) => {
         data-testid={props["data-testid"]}
         type="checkbox"
         checked={checked}
+        disabled={props.disabled}
         onChange={onChange}
       />
-      <span className="grey-text text-darken-3">{props.label}</span>
+      <span
+        className="grey-text text-darken-3"
+        data-testid={props["data-testid"] + "-label"}
+      >
+        {props.label}{" "}
+        {props.disabled && (
+          <span data-testid={props["data-testid"] + "-label-annotation"}>
+            ({props.disabledText})
+          </span>
+        )}
+      </span>
       <div className="inline-loader">
         <Loader type="spinner" loading={isLoading}>
           <Error
@@ -87,12 +98,15 @@ const Checkbox = (props) => {
 Checkbox.propTypes = {
   endpoint: PropTypes.string.isRequired,
   checked: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  disabledText: PropTypes.string,
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
 Checkbox.defaultProps = {
   "data-testid": "",
+  disabled: false,
 };
 
 export default Checkbox;

@@ -74,7 +74,10 @@ export const SimpleRow = (props) => {
   return (
     <Row data-testid={props["data-testid"]}>
       <Column>{props.title}</Column>
-      <Column data-testid={props["data-testid"] + "-value"}>
+      <Column
+        className={props.className}
+        data-testid={props["data-testid"] + "-value"}
+      >
         {props.children}
       </Column>
     </Row>
@@ -83,8 +86,11 @@ export const SimpleRow = (props) => {
 
 SimpleRow.propTypes = Object.assign({}, propTypes, {
   title: PropTypes.string.isRequired,
+  className: PropTypes.string,
 });
-SimpleRow.defaultProps = defaultProps;
+SimpleRow.defaultProps = Object.assign({}, defaultProps, {
+  className: "",
+});
 
 const exports = { Table, THead, TBody, Row, Header, Column };
 export default exports;
