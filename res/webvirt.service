@@ -1,0 +1,10 @@
+[Unit]
+Description=webvirt React web front-end
+After=uwsgi@webvirt_api.target
+Requires=uwsgi@webvirt_api.target
+
+[Service]
+ExecStart=/usr/bin/nginx -c /var/lib/webvirt_react/nginx.conf
+
+[Install]
+WantedBy=multi-user.target
