@@ -74,7 +74,7 @@ const StateControl = ({
   return (
     <div className={`state-control flex-display flex-col ${className}`}>
       <div className="flex"></div>
-      <Loader type={loaderType} loading={isLoading}>
+      <Loader width={140} type={loaderType} loading={isLoading}>
         {(domain.state.string === "Shutoff" ||
           domain.state.string === "Shutdown") && (
           <button

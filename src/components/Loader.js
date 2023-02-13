@@ -16,7 +16,7 @@
 import PropTypes from "prop-types";
 import FlexCentered from "./FlexCentered";
 
-const getLoaderByType = (type) => {
+const getLoaderByType = (type, width) => {
   switch (type) {
     case "spinner":
       return (
@@ -41,7 +41,7 @@ const getLoaderByType = (type) => {
       return (
         <div
           className="progress red lighten-3"
-          style={{ width: "100px", marginBottom: "16px" }}
+          style={{ width: `${width}px`, marginBottom: "16px" }}
         >
           <div className="indeterminate red lighten-1"></div>
         </div>
@@ -49,8 +49,8 @@ const getLoaderByType = (type) => {
   }
 };
 
-const Loader = ({ type, label, loading, children }) => {
-  const loader = getLoaderByType(type);
+const Loader = ({ width, type, label, loading, children }) => {
+  const loader = getLoaderByType(type, width);
 
   if (loading) {
     return (
@@ -66,16 +66,18 @@ const Loader = ({ type, label, loading, children }) => {
   return <div className="flex flex-display flex-col">{children}</div>;
 };
 
+Loader.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  label: PropTypes.string,
+  type: PropTypes.string,
+  width: PropTypes.number,
+};
+
 Loader.defaultProps = {
   loading: true,
   label: "",
   type: "progress",
-};
-
-Loader.requiredProps = {
-  loading: PropTypes.bool.isRequired,
-  label: PropTypes.string,
-  type: PropTypes.string,
+  width: 100,
 };
 
 export default Loader;

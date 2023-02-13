@@ -54,7 +54,7 @@ const Dashboard = () => {
   return (
     <Layout>
       <div className="domains container flex flex-display flex-col">
-        <Loader label="Fetching domains..." loading={isLoading}>
+        <Loader width={160} label="Fetching domains..." loading={isLoading}>
           <FlexCentered>
             <div className="row">
               {Object.keys(domains).length > 0 &&
