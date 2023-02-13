@@ -57,7 +57,7 @@ beforeEach(() => {
   );
 });
 
-const renderHook = () =>
+const renderHost = () =>
   act(
     async () =>
       await render(
@@ -81,7 +81,7 @@ test("Host renders nothing", async () => {
     })
   );
 
-  await renderHook();
+  await renderHost();
   const error = screen.queryByTestId("error");
   expect(error).not.toBeInTheDocument();
 
@@ -123,7 +123,7 @@ test("Host renders", async () => {
     })
   );
 
-  await renderHook();
+  await renderHost();
   const error = screen.queryByTestId("error");
   expect(error).not.toBeInTheDocument();
 });
@@ -131,7 +131,7 @@ test("Host renders", async () => {
 test("Host handles API errors", async () => {
   fetch.mockReturnValueOnce(Promise.reject({}));
 
-  await renderHook();
+  await renderHost();
   const error = screen.getByTestId("error");
   expect(error).toBeInTheDocument();
 });
