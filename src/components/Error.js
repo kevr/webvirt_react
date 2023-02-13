@@ -13,6 +13,8 @@
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+import PropTypes from "prop-types";
+
 const Error = ({ inline, enabled, error, children }) => {
   if (!enabled) {
     return children;
@@ -30,6 +32,12 @@ const Error = ({ inline, enabled, error, children }) => {
       </div>
     </div>
   );
+};
+
+Error.propTypes = {
+  inline: PropTypes.bool,
+  enabled: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };
 
 Error.defaultProps = {

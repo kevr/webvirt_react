@@ -95,7 +95,7 @@ const Login = ({ next }) => {
       <div className="text-center indicator-container">
         <Loader width={160} loading={progress}>
           <div className="error text-center">
-            <Error inline={true} enabled={!progress && error} error={error} />
+            <Error inline={true} enabled={error} error={error} />
           </div>
         </Loader>
       </div>
