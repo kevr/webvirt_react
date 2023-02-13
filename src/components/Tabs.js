@@ -24,7 +24,7 @@ export const Tabs = ({ id, children }) => {
   });
 
   return (
-    <div className="col s12">
+    <div className="col s12 flex flex-display flex-col">
       <ul id={id} className="tabs">
         {Children.map(children, (child, index) => (
           <li key={index} className="tab">
@@ -48,9 +48,12 @@ Tabs.propTypes = {
   id: PropTypes.string.isRequired,
 };
 
-export const Tab = ({ id, tabId, index, children }) => {
+export const Tab = ({ id, linkId, index, children }) => {
   return (
-    <div id={`${id}-tab-${index}`} className="col s12 tab">
+    <div
+      id={`${id}-tab-${index}`}
+      className="col s12 tab flex flex-display flex-col"
+    >
       {children}
     </div>
   );
