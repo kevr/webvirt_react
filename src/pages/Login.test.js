@@ -15,49 +15,29 @@
  */
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
-import {
-  RouterProvider,
-  MemoryRouter,
-  createMemoryRouter,
-} from "react-router-dom";
+import { RouterProvider, createMemoryRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { createStore } from "../store";
-import Login from "./Login";
 import { appRoutes } from "../Routing";
 
 let queryClient = new QueryClient();
 
+let router;
+let store;
+
 beforeEach(() => {
   queryClient = new QueryClient();
-});
 
-test("Login page renders", async () => {
-  const store = createStore();
-  await act(
-    async () =>
-      await render(
-        <Provider store={store}>
-          <HelmetProvider>
-            <MemoryRouter initialEntries={["/login?next=%2F"]}>
-              <Login />
-            </MemoryRouter>
-          </HelmetProvider>
-        </Provider>
-      )
-  );
-
-  const form = screen.getByTestId("login-form");
-  expect(form).toBeInTheDocument();
-});
-
-test("Login page navigates to / on login", async () => {
-  const router = createMemoryRouter(appRoutes, {
+  router = createMemoryRouter(appRoutes, {
     initialEntries: ["/login?next=%2F"],
   });
 
-  const store = createStore();
-  await act(
+  store = createStore();
+});
+
+const renderLogin = () =>
+  act(
     async () =>
       await render(
         <Provider store={store}>
@@ -69,6 +49,15 @@ test("Login page navigates to / on login", async () => {
         </Provider>
       )
   );
+
+test("Login page renders", async () => {
+  await renderLogin();
+  const form = screen.getByTestId("login-form");
+  expect(form).toBeInTheDocument();
+});
+
+test("Login page navigates to / on login", async () => {
+  await renderLogin();
 
   const good = [
     {
@@ -136,23 +125,7 @@ test("Login page navigates to / on login", async () => {
 });
 
 test("Login gracefully fails", async () => {
-  const router = createMemoryRouter(appRoutes, {
-    initialEntries: ["/login?next=%2F"],
-  });
-
-  const store = createStore();
-  await act(
-    async () =>
-      await render(
-        <Provider store={store}>
-          <QueryClientProvider client={queryClient}>
-            <HelmetProvider>
-              <RouterProvider router={router} />
-            </HelmetProvider>
-          </QueryClientProvider>
-        </Provider>
-      )
-  );
+  await renderLogin();
 
   fetch.mockReturnValueOnce(
     Promise.resolve({
