@@ -32,6 +32,15 @@ const Navbar = () => {
                 <i className="material-icons">home</i>
               </Link>
             </li>
+            <li>
+              <Link
+                id="host-link"
+                data-tooltip-content="Host Dashboard"
+                to="/host"
+              >
+                <i className="material-icons">dataset</i>
+              </Link>
+            </li>
           </ul>
           <div className="brand-logo-wrapper overflow-ellipsis">
             <span className="title text-center">{title}</span>
@@ -45,6 +54,7 @@ const Navbar = () => {
         </div>
       </div>
       <Tooltip anchorId="dashboard-link" place="bottom" />
+      <Tooltip anchorId="host-link" place="bottom" />
     </nav>
   );
 };

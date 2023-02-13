@@ -17,6 +17,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Domain from "./pages/Domain";
+import Host from "./pages/Host";
 
 export const appRoutes = [
   {
@@ -30,6 +31,10 @@ export const appRoutes = [
   {
     path: "/domains/:name",
     element: <Domain />,
+  },
+  {
+    path: "/host",
+    element: <Host />,
   },
 ];
 

@@ -14,7 +14,12 @@
  * permissions and limitations under the License.
  */
 import { configureStore } from "@reduxjs/toolkit";
-import { appReducer, sessionReducer, virtReducer } from "./Reducers";
+import {
+  appReducer,
+  sessionReducer,
+  virtReducer,
+  virtNetworkReducer,
+} from "./Reducers";
 
 export const createStore = () => {
   // Deduce initial states for each reducer
@@ -32,6 +37,7 @@ export const createStore = () => {
       app: appReducer,
       session: sessionReducer,
       virt: virtReducer,
+      networks: virtNetworkReducer,
     },
     preloadedState: initialState,
   });

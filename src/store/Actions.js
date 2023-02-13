@@ -38,6 +38,13 @@ export const setVirtDomains = (domains) => ({
   domains: domains,
 });
 
+export const SET_VIRT_NETWORKS = "SET_VIRT_NETWORKS";
+
+export const setVirtNetworks = (networks) => ({
+  type: SET_VIRT_NETWORKS,
+  networks: networks,
+});
+
 export const SET_APP_TITLE = "SET_APP_TITLE";
 
 export const setAppTitle = (title) => ({
