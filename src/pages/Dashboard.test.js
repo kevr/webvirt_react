@@ -25,9 +25,39 @@ import { stateString, VIR_DOMAIN_RUNNING } from "../API";
 
 let queryClient = new QueryClient();
 
+let router;
+let store;
+
 beforeEach(() => {
   queryClient = new QueryClient();
+
+  router = createMemoryRouter(appRoutes, {
+    initialEntries: ["/"],
+  });
+
+  store = createStore();
+  store.dispatch(
+    setSession({
+      user: "test",
+      access: "test_access",
+      refresh: "test_refresh",
+    })
+  );
 });
+
+const renderDashboard = () =>
+  act(
+    async () =>
+      await render(
+        <Provider store={store}>
+          <QueryClientProvider client={queryClient}>
+            <HelmetProvider>
+              <RouterProvider router={router} />
+            </HelmetProvider>
+          </QueryClientProvider>
+        </Provider>
+      )
+  );
 
 const mockDomain = (
   name,
@@ -46,19 +76,6 @@ const mockDomain = (
 });
 
 test("Dashboard gracefully fails", async () => {
-  const router = createMemoryRouter(appRoutes, {
-    initialEntries: ["/"],
-  });
-
-  const store = createStore();
-  store.dispatch(
-    setSession({
-      user: "test",
-      access: "test_access",
-      refresh: "test_refresh",
-    })
-  );
-
   fetch.mockReturnValue(
     Promise.resolve({
       status: 401,
@@ -69,21 +86,36 @@ test("Dashboard gracefully fails", async () => {
     })
   );
 
-  await act(
-    async () =>
-      await render(
-        <Provider store={store}>
-          <QueryClientProvider client={queryClient}>
-            <HelmetProvider>
-              <RouterProvider router={router} />
-            </HelmetProvider>
-          </QueryClientProvider>
-        </Provider>
-      )
-  );
+  await renderDashboard();
 
   // A graceful 401 failure leads to a navigation to /login.
   expect(router.state.location.pathname).toBe("/login");
+});
+
+test("Dashboard renders nothing", async () => {
+  fetch
+    .mockReturnValueOnce(
+      Promise.resolve({
+        status: 200,
+        json: () =>
+          Promise.resolve({
+            user: "test",
+            access: "new_access_token",
+            refresh: "new_refresh_token",
+          }),
+      })
+    )
+    .mockReturnValueOnce(
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve([]),
+      })
+    );
+
+  await renderDashboard();
+
+  const message = screen.getByText("No domains found...");
+  expect(message).toBeInTheDocument();
 });
 
 test("Dashboard renders domains", async () => {
@@ -111,31 +143,7 @@ test("Dashboard renders domains", async () => {
       })
     );
 
-  const router = createMemoryRouter(appRoutes, {
-    initialEntries: ["/"],
-  });
-
-  const store = createStore();
-  store.dispatch(
-    setSession({
-      user: "test",
-      access: "test_access",
-      refresh: "test_refresh",
-    })
-  );
-
-  await act(
-    async () =>
-      await render(
-        <Provider store={store}>
-          <QueryClientProvider client={queryClient}>
-            <HelmetProvider>
-              <RouterProvider router={router} />
-            </HelmetProvider>
-          </QueryClientProvider>
-        </Provider>
-      )
-  );
+  await renderDashboard();
 
   expect(router.state.location.pathname).toBe("/");
   const domainElements = screen.getAllByTestId("domain");
@@ -170,31 +178,7 @@ test("Dashboard renders domains with custom titles", async () => {
       })
     );
 
-  const router = createMemoryRouter(appRoutes, {
-    initialEntries: ["/"],
-  });
-
-  const store = createStore();
-  store.dispatch(
-    setSession({
-      user: "test",
-      access: "test_access",
-      refresh: "test_refresh",
-    })
-  );
-
-  await act(
-    async () =>
-      await render(
-        <Provider store={store}>
-          <QueryClientProvider client={queryClient}>
-            <HelmetProvider>
-              <RouterProvider router={router} />
-            </HelmetProvider>
-          </QueryClientProvider>
-        </Provider>
-      )
-  );
+  await renderDashboard();
 
   expect(router.state.location.pathname).toBe("/");
   const domainElements = screen.getAllByTestId("domain");

@@ -57,12 +57,15 @@ const Dashboard = () => {
         <Loader width={160} label="Fetching domains..." loading={isLoading}>
           <FlexCentered>
             <div className="row">
-              {Object.keys(domains).length > 0 &&
+              {Object.keys(domains).length > 0 ? (
                 Object.values(domains)
                   .sort(sortByName)
                   .map((domain, idx) => (
                     <DomainCard key={idx} uuid={idx} domain={domain} />
-                  ))}
+                  ))
+              ) : (
+                <p>No domains found...</p>
+              )}
               <Error enabled={!isLoading && isError} error={error} />
             </div>
           </FlexCentered>
