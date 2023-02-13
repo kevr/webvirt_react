@@ -23,7 +23,7 @@ import { VIR_DOMAIN_RUNNING, VIR_DOMAIN_SHUTOFF, stateString } from "../../API";
 const Boot = ({ domain }) => {
   const dispatch = useDispatch();
 
-  const defaultInfo = {
+  const info = {
     os: {
       bootmenu: {
         attrib: {
@@ -32,7 +32,10 @@ const Boot = ({ domain }) => {
       },
     },
   };
-  const info = domain.info || defaultInfo;
+
+  if (domain.info && domain.info.os.bootmenu.attrib !== undefined) {
+    info.os.bootmenu.attrib.enable = domain.info.os.bootmenu.attrib.enable;
+  }
 
   const defaultState = {
     id: VIR_DOMAIN_SHUTOFF,
@@ -70,7 +73,7 @@ const Boot = ({ domain }) => {
                 dispatch(
                   setVirtDomain(
                     Object.assign({}, domain, {
-                      info: Object.assign({}, info, {
+                      info: Object.assign({}, domain.info, {
                         os: data,
                       }),
                     })
