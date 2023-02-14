@@ -37,7 +37,7 @@ const Login = () => {
       </Helmet>
       <div className="flex"></div>
       <div className="text-center">
-        <img src="/images/logo.png" alt="Logo" width="128px" />
+        <img src="/images/logo.png" alt="Logo" width="180px" />
       </div>
       <div className="flex-display flex-row">
         <div className="flex"></div>
