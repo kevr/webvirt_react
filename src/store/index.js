@@ -18,6 +18,7 @@ import {
   appReducer,
   sessionReducer,
   virtReducer,
+  virtHostReducer,
   virtNetworkReducer,
 } from "./Reducers";
 
@@ -37,6 +38,7 @@ export const createStore = () => {
       app: appReducer,
       session: sessionReducer,
       virt: virtReducer,
+      host: virtHostReducer,
       networks: virtNetworkReducer,
     },
     preloadedState: initialState,

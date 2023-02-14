@@ -53,3 +53,5 @@ export const getDiskSize = (kbytes) => {
 
   return [kbytes.toFixed(1), unit];
 };
+
+export const yesNo = (bool) => (bool ? "Yes" : "No");

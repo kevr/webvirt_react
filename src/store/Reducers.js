@@ -19,6 +19,7 @@ import {
   SET_SESSION,
   SET_VIRT_DOMAIN,
   SET_VIRT_DOMAINS,
+  SET_VIRT_HOST,
   SET_VIRT_NETWORKS,
 } from "./Actions";
 
@@ -74,6 +75,16 @@ export const virtNetworkReducer = (state = defaultNetworksState, action) => {
   switch (action.type) {
     case SET_VIRT_NETWORKS:
       return action.networks;
+    default:
+      return state;
+  }
+};
+
+const defaultHostState = {};
+export const virtHostReducer = (state = defaultHostState, action) => {
+  switch (action.type) {
+    case SET_VIRT_HOST:
+      return action.host;
     default:
       return state;
   }

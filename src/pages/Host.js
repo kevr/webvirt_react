@@ -15,23 +15,30 @@
  */
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import M from "materialize-css";
 import { setAppTitle } from "../store/Actions";
 import { Layout } from "../layouts";
 import { Tabs, Tab } from "../components/Tabs";
 import Networks from "../components/host/Networks";
+import Overview from "../components/host/Overview";
 
 const Host = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setAppTitle("Host Dashboard"));
+
+    const el = document.querySelectorAll(".tabs");
+    M.Tabs.init(el);
   });
 
   return (
     <Layout>
-      <div style={{ marginTop: "4px" }} />
       <Tabs id="host-dashboard">
-        <Tab title="Networks" linkId="host-dashboard-networks" index={0}>
+        <Tab title="Overview" linkId="host-dashboard-overview" index={0}>
+          <Overview />
+        </Tab>
+        <Tab title="Networks" linkId="host-dashboard-networks" index={1}>
           <Networks />
         </Tab>
       </Tabs>

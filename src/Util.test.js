@@ -13,7 +13,7 @@
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-import { sortByName, getDiskSize } from "./Util";
+import { sortByName, getDiskSize, yesNo } from "./Util";
 
 test("sortByName", () => {
   const array = [{ name: "a" }, { name: "b" }, { name: "a" }];
@@ -54,4 +54,9 @@ test("getDiskSize PB", () => {
   const [quantity, unit] = getDiskSize(kbytes);
   expect(quantity).toStrictEqual("1.5");
   expect(unit).toBe("PB");
+});
+
+test("yesNo", () => {
+  expect(yesNo(true)).toBe("Yes");
+  expect(yesNo(false)).toBe("No");
 });

@@ -296,3 +296,11 @@ nav .brand-logo-wrapper {
 .checkbox-column {
   padding-bottom: 8px;
 }
+
+.tab.flex-display.active {
+  display: flex !important;
+}
+
+.layout > nav {
+  margin-bottom: 4px;
+}

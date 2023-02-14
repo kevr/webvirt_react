@@ -73,9 +73,7 @@ const Domain = () => {
       <Loader width={160} label="Loading domain..." loading={isLoading}>
         <Error enabled={isError} error={error}>
           <div className="container-full">
-            <div className="row" style={{ marginTop: "2px" }}>
-              {tabs}
-            </div>
+            <div className="row">{tabs}</div>
           </div>
         </Error>
       </Loader>

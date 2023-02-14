@@ -21,7 +21,8 @@ import { HelmetProvider } from "react-helmet-async";
 import { createStore } from "../store";
 import { setSession } from "../store/Actions";
 import { appRoutes } from "../Routing";
-import Host from "./Host";
+import Overview from "../components/host/Overview";
+import Networks from "../components/host/Networks";
 
 let queryClient;
 
@@ -43,19 +44,31 @@ beforeEach(() => {
       refresh: "test_refresh",
     })
   );
-
-  fetch.mockReturnValueOnce(
-    Promise.resolve({
-      status: 200,
-      json: () =>
-        Promise.resolve({
-          user: "root",
-          access: "new_access",
-          refresh: "new_refresh",
-        }),
-    })
-  );
 });
+
+const renderOverview = () =>
+  act(
+    async () =>
+      await render(
+        <Provider store={store}>
+          <QueryClientProvider client={queryClient}>
+            <Overview />
+          </QueryClientProvider>
+        </Provider>
+      )
+  );
+
+const renderNetworks = () =>
+  act(
+    async () =>
+      await render(
+        <Provider store={store}>
+          <QueryClientProvider client={queryClient}>
+            <Networks />
+          </QueryClientProvider>
+        </Provider>
+      )
+  );
 
 const renderHost = () =>
   act(
@@ -64,9 +77,7 @@ const renderHost = () =>
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
             <HelmetProvider>
-              <RouterProvider router={router}>
-                <Host />
-              </RouterProvider>
+              <RouterProvider router={router} />
             </HelmetProvider>
           </QueryClientProvider>
         </Provider>
@@ -74,12 +85,24 @@ const renderHost = () =>
   );
 
 test("Host renders nothing", async () => {
-  fetch.mockReturnValueOnce(
-    Promise.resolve({
-      status: 200,
-      json: () => Promise.resolve([]),
-    })
-  );
+  fetch
+    .mockReturnValueOnce(
+      Promise.resolve({
+        status: 200,
+        json: () =>
+          Promise.resolve({
+            user: "test",
+            access: "new_access",
+            refresh: "new_refresh",
+          }),
+      })
+    )
+    .mockReturnValue(
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve([]),
+      })
+    );
 
   await renderHost();
   const error = screen.queryByTestId("error");
@@ -89,7 +112,7 @@ test("Host renders nothing", async () => {
   expect(message).toBeInTheDocument();
 });
 
-test("Host renders", async () => {
+test("Networks renders", async () => {
   fetch.mockReturnValueOnce(
     Promise.resolve({
       status: 200,
@@ -123,15 +146,61 @@ test("Host renders", async () => {
     })
   );
 
-  await renderHost();
+  await renderNetworks();
   const error = screen.queryByTestId("error");
   expect(error).not.toBeInTheDocument();
 });
 
-test("Host handles API errors", async () => {
+test("Networks handles API errors", async () => {
   fetch.mockReturnValueOnce(Promise.reject({}));
 
-  await renderHost();
+  await renderNetworks();
   const error = screen.getByTestId("error");
+  expect(error).toBeInTheDocument();
+});
+
+test("Overview renders", async () => {
+  const data = {
+    type: "QEMU",
+    version: 7002000,
+    caps: {
+      cpu: {
+        arch: {
+          text: "x86_64",
+        },
+        topology: {
+          attrib: {
+            cores: 2,
+            threads: 2,
+          },
+        },
+      },
+      topology: {
+        cells: {
+          cell: {
+            memory: {
+              text: "1024",
+            },
+          },
+        },
+      },
+    },
+  };
+
+  fetch.mockReturnValueOnce(
+    Promise.resolve({
+      status: 200,
+      json: () => Promise.resolve(data),
+    })
+  );
+
+  await renderOverview();
+});
+
+test("Overview handles API errors", async () => {
+  fetch.mockReturnValueOnce(Promise.reject({}));
+
+  await renderOverview();
+  const error = screen.queryByTestId("error");
   expect(error).toBeInTheDocument();
 });
