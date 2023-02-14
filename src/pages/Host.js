@@ -32,7 +32,7 @@ const Host = () => {
 
   const { isLoading, isError, data, error } = useQuery(
     "host-networks",
-    () => apiRequest("networks", "get", session),
+    () => apiRequest("host/networks", "get", session),
     { retry: 0 }
   );
 
