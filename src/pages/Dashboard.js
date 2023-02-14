@@ -31,10 +31,10 @@ const Dashboard = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { isLoading, isError, error, data } = useQuery(
+  const { isLoading, isFetching, isError, error, data } = useQuery(
     "domains",
     () => apiRequest("domains", "get", session),
-    { retry: 0 }
+    { retry: 0, refetchOnMount: "always" }
   );
 
   useEffect(() => {
@@ -54,7 +54,11 @@ const Dashboard = () => {
   return (
     <Layout>
       <div className="domains container flex flex-display flex-col">
-        <Loader width={160} label="Fetching domains..." loading={isLoading}>
+        <Loader
+          width={160}
+          label="Fetching domains..."
+          loading={isFetching || isLoading}
+        >
           <FlexCentered>
             <div className="row">
               {Object.keys(domains).length > 0 ? (
