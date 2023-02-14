@@ -16,7 +16,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setSession, setVirtDomains, setVirtNetworks } from "../store/Actions";
+import { setSession } from "../store/Actions";
 import { apiLogin } from "../API";
 import Loader from "./Loader";
 import Error from "./Error";
