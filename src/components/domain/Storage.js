@@ -33,17 +33,12 @@ const DiskRow = ({ disk }) => {
 };
 
 const Storage = ({ domain }) => {
-  let disks = [];
-  let cdroms = [];
-  if (domain.info) {
-    disks = domain.info.devices.disk.filter(
-      (disk) => disk.attrib.device === "disk"
-    );
-    cdroms = domain.info.devices.disk.filter(
-      (disk) => disk.attrib.device === "cdrom"
-    );
-    console.log(cdroms);
-  }
+  const disks = domain.devices.disk.filter(
+    (disk) => disk.attrib.device === "disk"
+  );
+  const cdroms = domain.devices.disk.filter(
+    (disk) => disk.attrib.device === "cdrom"
+  );
 
   return (
     <div className="container">

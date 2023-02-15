@@ -67,10 +67,6 @@ const StateControl = ({
       });
   };
 
-  if (!domain.state) {
-    return <span />;
-  }
-
   return (
     <div className={`state-control flex-display flex-col ${className}`}>
       <div className="flex"></div>

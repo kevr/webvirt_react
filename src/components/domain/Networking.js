@@ -27,10 +27,7 @@ const NetworkRow = ({ network }) => (
 );
 
 const Networking = ({ domain }) => {
-  let networks = [];
-  if (domain.info !== undefined) {
-    networks = domain.info.devices["interface"];
-  }
+  const networks = domain.devices.interface;
 
   return (
     <div className="container">

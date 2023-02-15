@@ -29,8 +29,13 @@ const Domain = () => {
   const navigate = useNavigate();
 
   const { name } = useParams();
-  const domain = useSelector((state) => state.virt.domains[name] || {});
-  const title = domain.title || name;
+  const domain = useSelector((state) => state.virt.domains[name]);
+  console.log(domain);
+
+  let title = domain.name;
+  if (domain.title) {
+    title = domain.title.text;
+  }
 
   const [isLoaded, setLoaded] = useState(false);
   const { isLoading, isError, data, error, refetch } = useQuery(
@@ -46,7 +51,6 @@ const Domain = () => {
       if (!isError) {
         setLoaded(true);
         dispatch(setVirtDomain(data));
-        dispatch(setAppTitle(`Domain - ${data.title || name}`));
       } else {
         navigate("/");
       }

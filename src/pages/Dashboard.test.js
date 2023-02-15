@@ -68,7 +68,9 @@ const mockDomain = (
 ) => ({
   id: id,
   name: name,
-  title: title,
+  title: {
+    text: title,
+  },
   state: {
     id: stateId,
     string: stateStr,

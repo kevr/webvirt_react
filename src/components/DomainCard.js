@@ -22,12 +22,12 @@ const DomainCard = ({ domain, uuid }) => {
   const color = config.stateColors.foreground[domain.state.string];
   const cardColor = config.stateColors.background[domain.state.string];
 
+  let title = domain.name;
   let tooltip = domain.name;
-  if (domain.title) {
-    tooltip = `${domain.title} (${domain.name})`;
+  if (domain.title && domain.title.text) {
+    title = domain.title.text;
+    tooltip = `${domain.title.text} (${domain.name})`;
   }
-
-  const title = domain.title ? domain.title : domain.name;
 
   return (
     <div className="col s6 m4">

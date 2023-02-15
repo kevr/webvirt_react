@@ -66,22 +66,20 @@ const mockDisk = (options = diskOptions) => {
 
 test("Storage renders", async () => {
   const domain = {
-    info: {
-      devices: {
-        disk: [
-          mockDisk({
-            file: "/path/to/source.iso",
-            device: "cdrom",
-          }),
-          mockDisk({
-            bus: "virtio",
-            dev: "vda",
-            file: "disk.qcow",
-            driver_type: "virtio",
-            device: "disk",
-          }),
-        ],
-      },
+    devices: {
+      disk: [
+        mockDisk({
+          file: "/path/to/source.iso",
+          device: "cdrom",
+        }),
+        mockDisk({
+          bus: "virtio",
+          dev: "vda",
+          file: "disk.qcow",
+          driver_type: "virtio",
+          device: "disk",
+        }),
+      ],
     },
   };
 

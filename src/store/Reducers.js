@@ -22,6 +22,7 @@ import {
   SET_VIRT_HOST,
   SET_VIRT_NETWORKS,
 } from "./Actions";
+import { AttributeProxy, DomainsProxy } from "./Proxy";
 
 const defaultSessionState = {};
 
@@ -41,7 +42,23 @@ export const sessionReducer = (state = defaultSessionState, action) => {
   }
 };
 
-const defaultVirtState = { domains: {} };
+const defaultVirtState = { domains: DomainsProxy() };
+
+// An object form of DomainProxy: we must be able to use DomainProxy
+// as an object to be stored in Redux alongside the real domain data
+// to allow for seamless attributes.
+const defaultDomainState = {
+  attrib: {},
+  uuid: AttributeProxy(),
+  vcpu: AttributeProxy(),
+  memory: AttributeProxy(),
+  devices: {
+    disk: [],
+    interface: [],
+    emulator: {},
+  },
+  os: AttributeProxy(),
+};
 
 export const virtReducer = (state = defaultVirtState, action) => {
   switch (action.type) {
@@ -55,10 +72,11 @@ export const virtReducer = (state = defaultVirtState, action) => {
           ),
         }),
       });
-      console.log(o);
       return o;
     case SET_VIRT_DOMAINS:
-      const domains = JSON.parse(JSON.stringify(action.domains));
+      const domains = action.domains.map((domain) => {
+        return Object.assign({}, defaultDomainState, domain);
+      });
       const object = {};
       domains.forEach((domain, index) => {
         object[domain.name] = domain;

@@ -57,7 +57,7 @@ const Dashboard = () => {
         <Loader
           width={160}
           label="Fetching domains..."
-          loading={isFetching || isLoading}
+          loading={!data && isLoading}
         >
           <FlexCentered>
             <div className="row">

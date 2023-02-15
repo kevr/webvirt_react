@@ -18,20 +18,18 @@ import Networking from "./Networking";
 
 test("Networking renders unassigned name", async () => {
   const domain = {
-    info: {
-      devices: {
-        interface: [
-          {
-            attrib: { type: "user" },
-            model: {
-              attrib: { type: "virtio" },
-            },
-            mac: {
-              attrib: { address: "aa:bb:cc:dd:11:22:33:44" },
-            },
+    devices: {
+      interface: [
+        {
+          attrib: { type: "user" },
+          model: {
+            attrib: { type: "virtio" },
           },
-        ],
-      },
+          mac: {
+            attrib: { address: "aa:bb:cc:dd:11:22:33:44" },
+          },
+        },
+      ],
     },
   };
 

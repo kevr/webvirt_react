@@ -20,21 +20,21 @@ import Boot from "./Boot";
 import config from "../../Config.json";
 
 const Overview = ({ domain, refetch }) => {
-  const state = domain.state || {};
   let stateColor = "";
-  if (domain.state) {
+  if (domain.state.id) {
     stateColor = config.stateColors.foreground[domain.state.id];
   }
 
-  const info = domain.info || {
-    devices: { emulator: "", disk: [], interface: [] },
-    os: {
-      boot: { attrib: {} },
-      type: { attrib: {} },
-      bootmenu: { attrib: { enable: false } },
-    },
-  };
+  let title = domain.name;
+  if (domain.title) {
+    title = domain.title.text;
+  }
 
+  let description = "";
+  if (domain.description) {
+    description = domain.description.text;
+  }
+  console.log(domain.attrib.type);
   return (
     <div className="overview container">
       <div className="row">
@@ -52,23 +52,23 @@ const Overview = ({ domain, refetch }) => {
               />
 
               <div className="flex">
-                <h3 className="domain-name">{domain.title || domain.name}</h3>
+                <h3 className="domain-name">{title}</h3>
               </div>
             </div>
           </div>
           <Table>
             <TBody>
               <SimpleRow title="Name">{domain.name}</SimpleRow>
-              <SimpleRow title="UUID">{domain.uuid}</SimpleRow>
+              <SimpleRow title="UUID">{domain.uuid.text}</SimpleRow>
               <SimpleRow title="State">
-                <span className={stateColor}>{state.string}</span>
+                <span className={stateColor}>{domain.state.string}</span>
               </SimpleRow>
               <SimpleRow title="Title" className="text-input-column">
                 <TextInput
                   data-testid="title-input"
                   name="title"
                   domainEndpoint="metadata"
-                  value={domain.title || ""}
+                  value={title || ""}
                   domain={domain}
                   refetch={refetch}
                 />
@@ -78,7 +78,7 @@ const Overview = ({ domain, refetch }) => {
                   data-testid="description-input"
                   name="description"
                   domainEndpoint="metadata"
-                  value={domain.description || ""}
+                  value={description || ""}
                   domain={domain}
                   refetch={refetch}
                 />
@@ -90,18 +90,18 @@ const Overview = ({ domain, refetch }) => {
           <h5>Hypervisor Details</h5>
           <Table>
             <TBody>
-              <SimpleRow title="Hypervisor">{domain.type}</SimpleRow>
+              <SimpleRow title="Hypervisor">{domain.attrib.type}</SimpleRow>
               <SimpleRow title="Architecture">
-                {info.os.type.attrib.arch}
+                {domain.os.type.attrib.arch}
               </SimpleRow>
               <SimpleRow title="Emulator">
-                {info.devices.emulator.text}
+                {domain.devices.emulator.text}
               </SimpleRow>
               <SimpleRow title="Chipset">
-                {info.os.type.attrib.machine}
+                {domain.os.type.attrib.machine}
               </SimpleRow>
               <SimpleRow title="Firmware">
-                {info.os.boot.attrib.dev === "hd" ? "BIOS" : "EFI"}
+                {domain.os.boot.attrib.dev === "hd" ? "BIOS" : "EFI"}
               </SimpleRow>
             </TBody>
           </Table>
@@ -113,10 +113,15 @@ const Overview = ({ domain, refetch }) => {
           <Table>
             <TBody>
               <SimpleRow title="vCPUs" data-testid="resources-vcpus">
-                {info.cpus}
+                {domain.vcpu.text}
               </SimpleRow>
               <SimpleRow title="Memory" data-testid="resources-memory">
-                {info.memory / 1024} / {info.maxMemory / 1024} MB
+                {domain.memory.text && (
+                  <div>
+                    {parseInt(domain.currentMemory.text) / 1024} /{" "}
+                    {parseInt(domain.memory.text) / 1024} MB
+                  </div>
+                )}
               </SimpleRow>
             </TBody>
           </Table>

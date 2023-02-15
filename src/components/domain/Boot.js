@@ -18,30 +18,10 @@ import { useDispatch } from "react-redux";
 import { setVirtDomain } from "../../store/Actions";
 import { Table, TBody, Row, Column } from "../Table";
 import Checkbox from "../Checkbox";
-import { VIR_DOMAIN_RUNNING, VIR_DOMAIN_SHUTOFF, stateString } from "../../API";
+import { VIR_DOMAIN_RUNNING } from "../../API";
 
 const Boot = ({ domain }) => {
   const dispatch = useDispatch();
-
-  const info = {
-    os: {
-      bootmenu: {
-        attrib: {
-          enable: "no",
-        },
-      },
-    },
-  };
-
-  if (domain.info && domain.info.os.bootmenu.attrib !== undefined) {
-    info.os.bootmenu.attrib.enable = domain.info.os.bootmenu.attrib.enable;
-  }
-
-  const defaultState = {
-    id: VIR_DOMAIN_SHUTOFF,
-    string: stateString(VIR_DOMAIN_SHUTOFF),
-  };
-  const state = domain.state || defaultState;
 
   return (
     <Table>
@@ -65,17 +45,15 @@ const Boot = ({ domain }) => {
             <Checkbox
               data-testid="bootmenu-checkbox"
               endpoint={`domains/${domain.name}/bootmenu`}
-              checked={info.os.bootmenu.attrib.enable === "yes"}
+              checked={domain.os.bootmenu.attrib.enable === "yes"}
               label="Enable boot menu"
-              disabled={state.id === VIR_DOMAIN_RUNNING}
+              disabled={domain.state.id === VIR_DOMAIN_RUNNING}
               disabledText="disabled while running"
               onChange={(data) => {
                 dispatch(
                   setVirtDomain(
                     Object.assign({}, domain, {
-                      info: Object.assign({}, domain.info, {
-                        os: data,
-                      }),
+                      os: data,
                     })
                   )
                 );
