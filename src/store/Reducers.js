@@ -65,13 +65,15 @@ export const virtReducer = (state = defaultVirtState, action) => {
     case SET_VIRT_DOMAIN:
       const o = Object.assign({}, state, {
         domains: Object.assign({}, state.domains, {
-          [action.domain.name]: Object.assign(
+          [action.domain.name.text]: Object.assign(
             {},
-            state.domains[action.domain.name],
+            state.domains[action.domain.name.text],
             action.domain
           ),
         }),
       });
+      console.log("Reduced");
+      console.log(o);
       return o;
     case SET_VIRT_DOMAINS:
       const domains = action.domains.map((domain) => {
@@ -79,7 +81,7 @@ export const virtReducer = (state = defaultVirtState, action) => {
       });
       const object = {};
       domains.forEach((domain, index) => {
-        object[domain.name] = domain;
+        object[domain.name.text] = domain;
       });
       return Object.assign({}, state, { domains: object });
     default:

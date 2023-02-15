@@ -30,7 +30,7 @@ const Boot = ({ domain }) => {
           <Column className="checkbox-column">
             <Checkbox
               data-testid="autostart-checkbox"
-              endpoint={`domains/${domain.name}/autostart`}
+              endpoint={`domains/${domain.name.text}/autostart`}
               checked={domain.autostart || false}
               disabled={domain.autostart === undefined}
               label="Autostart"
@@ -44,7 +44,7 @@ const Boot = ({ domain }) => {
           <Column className="checkbox-column">
             <Checkbox
               data-testid="bootmenu-checkbox"
-              endpoint={`domains/${domain.name}/bootmenu`}
+              endpoint={`domains/${domain.name.text}/bootmenu`}
               checked={domain.os.bootmenu.attrib.enable === "yes"}
               label="Enable boot menu"
               disabled={domain.state.attrib.id === VIR_DOMAIN_RUNNING}

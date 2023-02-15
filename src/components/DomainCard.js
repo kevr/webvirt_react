@@ -24,11 +24,11 @@ const DomainCard = ({ domain, uuid }) => {
   const color = config.stateColors.foreground[domain.state.attrib.string];
   const cardColor = config.stateColors.background[domain.state.attrib.string];
 
-  let title = domain.name;
-  let tooltip = domain.name;
+  let title = domain.name.text;
+  let tooltip = domain.name.text;
   if (domain.title && domain.title.text) {
     title = domain.title.text;
-    tooltip = `${domain.title.text} (${domain.name})`;
+    tooltip = `${domain.title.text} (${domain.name.text})`;
   }
 
   return (
@@ -37,7 +37,7 @@ const DomainCard = ({ domain, uuid }) => {
         <div id={`domain-tooltip-${uuid}`} data-tooltip-content={tooltip}>
           <div className="card-content">
             <Link
-              to={`/domains/${domain.name}`}
+              to={`/domains/${domain.name.text}`}
               className="grey-text text-darken-4"
             >
               <span className="card-title" data-testid="domain-title">

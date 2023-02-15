@@ -35,7 +35,7 @@ const TextInput = (props) => {
   }, [valueProp]);
 
   const onBlur = (value) => {
-    const endpoint = `domains/${props.domain.name}/${props.domainEndpoint}`;
+    const endpoint = `domains/${props.domain.name.text}/${props.domainEndpoint}`;
     const data = {
       [props.name]: value,
     };

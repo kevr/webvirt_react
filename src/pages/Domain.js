@@ -32,7 +32,7 @@ const Domain = () => {
   const domain = useSelector((state) => state.virt.domains[name]);
   console.log(domain);
 
-  let title = domain.name;
+  let title = name;
   if (domain.title) {
     title = domain.title.text;
   }

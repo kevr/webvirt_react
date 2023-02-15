@@ -14,8 +14,8 @@
  * permissions and limitations under the License.
  */
 export const sortByName = (a, b) => {
-  if (a.name < b.name) return -1;
-  else if (a.name > b.name) return 1;
+  if (a.name.text < b.name.text) return -1;
+  else if (a.name.text > b.name.text) return 1;
   return 0;
 };
 

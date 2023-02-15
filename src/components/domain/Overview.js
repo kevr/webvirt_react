@@ -25,7 +25,7 @@ const Overview = ({ domain, refetch }) => {
     stateColor = config.stateColors.foreground[domain.state.attrib.id];
   }
 
-  let title = domain.name;
+  let title = domain.name.text;
   if (domain.title) {
     title = domain.title.text;
   }
@@ -58,7 +58,7 @@ const Overview = ({ domain, refetch }) => {
           </div>
           <Table>
             <TBody>
-              <SimpleRow title="Name">{domain.name}</SimpleRow>
+              <SimpleRow title="Name">{domain.name.text}</SimpleRow>
               <SimpleRow title="UUID">{domain.uuid.text}</SimpleRow>
               <SimpleRow title="State">
                 <span className={stateColor}>{domain.state.attrib.string}</span>
