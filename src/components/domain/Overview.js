@@ -68,7 +68,7 @@ const Overview = ({ domain, refetch }) => {
                   data-testid="title-input"
                   name="title"
                   domainEndpoint="metadata"
-                  value={title || ""}
+                  value={domain.title.text || ""}
                   domain={domain}
                   refetch={refetch}
                 />
