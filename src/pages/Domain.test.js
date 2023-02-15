@@ -22,106 +22,21 @@ import { createStore } from "../store";
 import { setSession } from "../store/Actions";
 import { stateString, VIR_DOMAIN_RUNNING, VIR_DOMAIN_SHUTOFF } from "../API";
 import { appRoutes } from "../Routing";
+import { domainDiskJson, domainInterfaceJson, domainJson } from "../Data";
 
 let queryClient = new QueryClient();
 
+let router;
+let store;
+
 beforeEach(() => {
   queryClient = new QueryClient();
-});
 
-const mockDomainDisk = (file, dev, bus) => ({
-  attrib: {
-    device: "disk",
-  },
-  driver: {
-    attrib: {
-      name: "qemu",
-      type: "sata",
-    },
-  },
-  source: { attrib: { file } },
-  target: { attrib: { dev, bus } },
-  block_info: {
-    capacity: 0,
-    allocation: 0,
-    physical: 0,
-  },
-});
-
-const mockDomainInterface = (name, type, address) => ({
-  alias: {
-    attrib: { name },
-  },
-  attrib: { type: "user" },
-  mac: {
-    attrib: { address },
-  },
-  model: {
-    attrib: { type },
-  },
-});
-
-const mockDomainJson = (name, title, id, stateId) => ({
-  id: id,
-  name: {
-    text: name,
-  },
-  uuid: {
-    text: "1234-abcd",
-  },
-  title: {
-    text: title,
-  },
-  state: {
-    attrib: {
-      id: stateId,
-      string: stateString(stateId),
-    },
-  },
-  vcpu: {
-    text: "2",
-  },
-  memory: {
-    text: 1024 * 1024,
-  },
-  currentMemory: {
-    text: 1024 * 1024,
-  },
-  os: {
-    type: {
-      attrib: {
-        arch: "x86_64",
-        machine: "pc-q35-7.2",
-      },
-    },
-    boot: {
-      attrib: {
-        dev: "hd",
-      },
-    },
-    bootmenu: {
-      attrib: {
-        enable: "no",
-      },
-    },
-  },
-  devices: {
-    disk: [mockDomainDisk("disk.qcow", "vda", "virtio")],
-    interface: [
-      mockDomainInterface("net0", "virtio", "aa:bb:cc:dd:11:22:33:44"),
-    ],
-    emulator: {
-      text: "qemu-system-x86_64",
-    },
-  },
-});
-
-test("Domain renders", async () => {
-  const router = createMemoryRouter(appRoutes, {
+  router = createMemoryRouter(appRoutes, {
     initialEntries: ["/domains/test"],
   });
 
-  const store = createStore();
+  store = createStore();
   store.dispatch(
     setSession({
       user: "test",
@@ -130,27 +45,22 @@ test("Domain renders", async () => {
     })
   );
 
-  const domain = mockDomainJson("test", "", 1, VIR_DOMAIN_RUNNING);
-  fetch
-    .mockReturnValueOnce(
-      Promise.resolve({
-        status: 200,
-        json: () =>
-          Promise.resolve({
-            user: "test",
-            access: "new_access_token",
-            refresh: "new_refresh_token",
-          }),
-      })
-    )
-    .mockReturnValueOnce(
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve(domain),
-      })
-    );
+  fetch.mockReturnValueOnce(
+    // Mock /auth/refresh/ query response
+    Promise.resolve({
+      status: 200,
+      json: () =>
+        Promise.resolve({
+          user: "test",
+          access: "new_access_token",
+          refresh: "new_refresh_token",
+        }),
+    })
+  );
+});
 
-  await act(
+const renderDomain = () =>
+  act(
     async () =>
       await render(
         <Provider store={store}>
@@ -162,6 +72,24 @@ test("Domain renders", async () => {
         </Provider>
       )
   );
+
+test("Domain renders", async () => {
+  const domain = domainJson(
+    "test",
+    "",
+    1,
+    VIR_DOMAIN_RUNNING,
+    [domainDiskJson("disk.qcow", "vda", "virtio")],
+    [domainInterfaceJson("net0", "virtio", "aa:bb:cc:dd:11:22:33:44")]
+  );
+  fetch.mockReturnValueOnce(
+    Promise.resolve({
+      status: 200,
+      json: () => Promise.resolve(domain),
+    })
+  );
+
+  await renderDomain();
 
   // Expect a network interface to be displayed
   const iface = screen.getByTestId("interface");
@@ -206,11 +134,6 @@ test("Domain renders", async () => {
 });
 
 test("Domain renders custom title", async () => {
-  const router = createMemoryRouter(appRoutes, {
-    initialEntries: ["/domains/test"],
-  });
-
-  const store = createStore();
   store.dispatch(
     setSession({
       user: "test",
@@ -219,38 +142,22 @@ test("Domain renders custom title", async () => {
     })
   );
 
-  const domain = mockDomainJson("test", "Custom Title", 1, VIR_DOMAIN_RUNNING);
-  fetch
-    .mockReturnValueOnce(
-      Promise.resolve({
-        status: 200,
-        json: () =>
-          Promise.resolve({
-            user: "test",
-            access: "new_access_token",
-            refresh: "new_refresh_token",
-          }),
-      })
-    )
-    .mockReturnValue(
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve(domain),
-      })
-    );
-
-  await act(
-    async () =>
-      await render(
-        <Provider store={store}>
-          <HelmetProvider>
-            <QueryClientProvider client={queryClient}>
-              <RouterProvider router={router} />
-            </QueryClientProvider>
-          </HelmetProvider>
-        </Provider>
-      )
+  const domain = domainJson(
+    "test",
+    "Custom Title",
+    1,
+    VIR_DOMAIN_RUNNING,
+    [domainDiskJson("disk.qcow", "vda", "virtio")],
+    [domainInterfaceJson("net0", "virtio", "aa:bb:cc:dd:11:22:33:44")]
   );
+  fetch.mockReturnValue(
+    Promise.resolve({
+      status: 200,
+      json: () => Promise.resolve(domain),
+    })
+  );
+
+  await renderDomain();
 
   const iface = screen.getByTestId("interface");
   expect(iface).toBeInTheDocument();
@@ -260,12 +167,6 @@ test("Domain renders custom title", async () => {
 });
 
 test("Domain options can be changed", async () => {
-  console.log("2LAST");
-  const router = createMemoryRouter(appRoutes, {
-    initialEntries: ["/domains/test"],
-  });
-
-  const store = createStore();
   store.dispatch(
     setSession({
       user: "test",
@@ -274,39 +175,15 @@ test("Domain options can be changed", async () => {
     })
   );
 
-  const domain = mockDomainJson("test", "Test Title", 1, VIR_DOMAIN_RUNNING);
-  fetch
-    .mockReturnValueOnce(
-      Promise.resolve({
-        status: 200,
-        json: () =>
-          Promise.resolve({
-            user: "test",
-            access: "new_access_token",
-            refresh: "new_refresh_token",
-          }),
-      })
-    )
-    .mockReturnValueOnce(
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve(domain),
-      })
-    );
-
-  const { rerender } = await act(
-    async () =>
-      await render(
-        <Provider store={store}>
-          <HelmetProvider>
-            <QueryClientProvider client={queryClient}>
-              <RouterProvider router={router} />
-            </QueryClientProvider>
-          </HelmetProvider>
-        </Provider>
-      )
+  const domain = domainJson("test", "Test Title", 1, VIR_DOMAIN_RUNNING);
+  fetch.mockReturnValueOnce(
+    Promise.resolve({
+      status: 200,
+      json: () => Promise.resolve(domain),
+    })
   );
 
+  const { rerender } = await renderDomain();
   // Test that autostart-checkbox can be clicked and results in a "done" icon.
   fetch.mockReturnValueOnce(
     Promise.resolve({
@@ -413,32 +290,7 @@ test("Domain options can be changed", async () => {
 });
 
 test("Domain gracefully navigates to /", async () => {
-  const router = createMemoryRouter(appRoutes, {
-    initialEntries: ["/domains/test"],
-  });
-
-  const store = createStore();
-  store.dispatch(
-    setSession({
-      user: "test",
-      access: "test_access",
-      refresh: "test_refresh",
-    })
-  );
-
   fetch
-    .mockReturnValueOnce(
-      // Mock /auth/refresh/ query response
-      Promise.resolve({
-        status: 200,
-        json: () =>
-          Promise.resolve({
-            user: "test",
-            access: "new_access_token",
-            refresh: "new_refresh_token",
-          }),
-      })
-    )
     .mockReturnValueOnce(
       // Mock /domains/test/ query response
       Promise.resolve({
@@ -469,18 +321,7 @@ test("Domain gracefully navigates to /", async () => {
       })
     );
 
-  await act(
-    async () =>
-      await render(
-        <Provider store={store}>
-          <HelmetProvider>
-            <QueryClientProvider client={queryClient}>
-              <RouterProvider router={router} />
-            </QueryClientProvider>
-          </HelmetProvider>
-        </Provider>
-      )
-  );
+  await renderDomain();
 
   expect(fetch).toBeCalledTimes(4);
   expect(router.state.location.pathname).toBe("/");

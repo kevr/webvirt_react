@@ -59,7 +59,7 @@ const renderDashboard = () =>
       )
   );
 
-const mockDomain = (
+const simpleDomainJson = (
   name,
   title = undefined,
   id = -1,
@@ -126,8 +126,8 @@ test("Dashboard renders nothing", async () => {
 
 test("Dashboard renders domains", async () => {
   const domains = [
-    mockDomain("test_machine", undefined, 1),
-    mockDomain("test_machine2", undefined, 2),
+    simpleDomainJson("test_machine", undefined, 1),
+    simpleDomainJson("test_machine2", undefined, 2),
   ];
 
   fetch
@@ -161,8 +161,8 @@ test("Dashboard renders domains", async () => {
 
 test("Dashboard renders domains with custom titles", async () => {
   const domains = [
-    mockDomain("test_machine", "Custom Title", 1),
-    mockDomain("test_machine2", 2),
+    simpleDomainJson("test_machine", "Custom Title", 1),
+    simpleDomainJson("test_machine2", 2),
   ];
 
   fetch
