@@ -26,7 +26,7 @@ const Overview = ({ domain, refetch }) => {
   }
 
   let title = domain.name.text;
-  if (domain.title) {
+  if (domain.title.text) {
     title = domain.title.text;
   }
 

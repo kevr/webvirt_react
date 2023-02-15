@@ -69,7 +69,9 @@ const mockDomainJson = (name, title, id, stateId) => ({
   uuid: {
     text: "1234-abcd",
   },
-  title: title,
+  title: {
+    text: title,
+  },
   state: {
     attrib: {
       id: stateId,
@@ -272,7 +274,7 @@ test("Domain options can be changed", async () => {
     })
   );
 
-  const domain = mockDomainJson("test", "", 1, VIR_DOMAIN_RUNNING);
+  const domain = mockDomainJson("test", "Test Title", 1, VIR_DOMAIN_RUNNING);
   fetch
     .mockReturnValueOnce(
       Promise.resolve({

@@ -33,7 +33,7 @@ const Domain = () => {
   console.log(domain);
 
   let title = name;
-  if (domain.title) {
+  if (domain.title.text) {
     title = domain.title.text;
   }
 
