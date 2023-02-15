@@ -31,7 +31,7 @@ const Dashboard = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { isLoading, isFetching, isError, error, data } = useQuery(
+  const { isLoading, isError, error, data } = useQuery(
     "domains",
     () => apiRequest("domains", "get", session),
     { retry: 0, refetchOnMount: "always" }
