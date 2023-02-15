@@ -72,8 +72,10 @@ const mockDomain = (
     text: title,
   },
   state: {
-    id: stateId,
-    string: stateStr,
+    attrib: {
+      id: stateId,
+      string: stateStr,
+    },
   },
 });
 

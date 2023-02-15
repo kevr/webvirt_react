@@ -44,7 +44,7 @@ export const AttributeProxy = () => {
 export const DomainProxy = () => {
   const target = {
     name: "",
-    state: {},
+    state: { attrib: {} },
     autostart: false,
     attrib: {},
   };

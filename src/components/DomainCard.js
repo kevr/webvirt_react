@@ -19,8 +19,10 @@ import StateControl from "./StateControl";
 import config from "../Config.json";
 
 const DomainCard = ({ domain, uuid }) => {
-  const color = config.stateColors.foreground[domain.state.string];
-  const cardColor = config.stateColors.background[domain.state.string];
+  console.log(domain);
+
+  const color = config.stateColors.foreground[domain.state.attrib.string];
+  const cardColor = config.stateColors.background[domain.state.attrib.string];
 
   let title = domain.name;
   let tooltip = domain.name;
@@ -42,7 +44,8 @@ const DomainCard = ({ domain, uuid }) => {
                 {title}
               </span>
               <p style={{ display: "block", width: "110px" }}>
-                State: <span className={color}>{domain.state.string}</span>
+                State:{" "}
+                <span className={color}>{domain.state.attrib.string}</span>
               </p>
             </Link>
           </div>

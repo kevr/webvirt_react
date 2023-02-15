@@ -47,7 +47,7 @@ const Boot = ({ domain }) => {
               endpoint={`domains/${domain.name}/bootmenu`}
               checked={domain.os.bootmenu.attrib.enable === "yes"}
               label="Enable boot menu"
-              disabled={domain.state.id === VIR_DOMAIN_RUNNING}
+              disabled={domain.state.attrib.id === VIR_DOMAIN_RUNNING}
               disabledText="disabled while running"
               onChange={(data) => {
                 dispatch(

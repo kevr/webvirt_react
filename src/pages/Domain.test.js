@@ -69,8 +69,10 @@ const mockDomainJson = (name, title, id, stateId) => ({
   },
   title: title,
   state: {
-    id: stateId,
-    string: stateString(stateId),
+    attrib: {
+      id: stateId,
+      string: stateString(stateId),
+    },
   },
   vcpu: {
     text: "2",
@@ -339,8 +341,8 @@ test("Domain options can be changed", async () => {
   ).toBe("(disabled while running)");
 
   // Render a new domain view with Shutoff state.
-  domain.state.id = VIR_DOMAIN_SHUTOFF;
-  domain.state.string = stateString(VIR_DOMAIN_SHUTOFF);
+  domain.state.attrib.id = VIR_DOMAIN_SHUTOFF;
+  domain.state.attrib.string = stateString(VIR_DOMAIN_SHUTOFF);
   fetch
     .mockReturnValueOnce(
       Promise.resolve({

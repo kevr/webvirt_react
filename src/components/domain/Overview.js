@@ -21,8 +21,8 @@ import config from "../../Config.json";
 
 const Overview = ({ domain, refetch }) => {
   let stateColor = "";
-  if (domain.state.id) {
-    stateColor = config.stateColors.foreground[domain.state.id];
+  if (domain.state.attrib.id) {
+    stateColor = config.stateColors.foreground[domain.state.attrib.id];
   }
 
   let title = domain.name;
@@ -61,7 +61,7 @@ const Overview = ({ domain, refetch }) => {
               <SimpleRow title="Name">{domain.name}</SimpleRow>
               <SimpleRow title="UUID">{domain.uuid.text}</SimpleRow>
               <SimpleRow title="State">
-                <span className={stateColor}>{domain.state.string}</span>
+                <span className={stateColor}>{domain.state.attrib.string}</span>
               </SimpleRow>
               <SimpleRow title="Title" className="text-input-column">
                 <TextInput

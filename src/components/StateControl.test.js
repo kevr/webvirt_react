@@ -35,8 +35,10 @@ test("StateControl starts via webvirtd", async () => {
     id: -1,
     name: "test_machine",
     state: {
-      id: VIR_DOMAIN_SHUTOFF,
-      string: stateString(VIR_DOMAIN_SHUTOFF),
+      attrib: {
+        id: VIR_DOMAIN_SHUTOFF,
+        string: stateString(VIR_DOMAIN_SHUTOFF),
+      },
     },
   };
 
@@ -57,8 +59,10 @@ test("StateControl starts via webvirtd", async () => {
           id: -1,
           name: "test_machine",
           state: {
-            id: VIR_DOMAIN_RUNNING,
-            string: stateString(VIR_DOMAIN_RUNNING),
+            attrib: {
+              id: VIR_DOMAIN_RUNNING,
+              string: stateString(VIR_DOMAIN_RUNNING),
+            },
           },
         }),
     })
@@ -84,8 +88,10 @@ test("StateControl start gracefully fails", async () => {
     id: -1,
     name: "test_machine",
     state: {
-      id: VIR_DOMAIN_SHUTOFF,
-      string: stateString(VIR_DOMAIN_SHUTOFF),
+      attrib: {
+        id: VIR_DOMAIN_SHUTOFF,
+        string: stateString(VIR_DOMAIN_SHUTOFF),
+      },
     },
   };
 
@@ -128,8 +134,10 @@ test("StateControl shuts down via webvirtd", async () => {
     id: -1,
     name: "test_machine",
     state: {
-      id: VIR_DOMAIN_RUNNING,
-      string: stateString(VIR_DOMAIN_RUNNING),
+      attrib: {
+        id: VIR_DOMAIN_RUNNING,
+        string: stateString(VIR_DOMAIN_RUNNING),
+      },
     },
   };
 
@@ -150,8 +158,10 @@ test("StateControl shuts down via webvirtd", async () => {
           id: -1,
           name: "test_machine",
           state: {
-            id: VIR_DOMAIN_SHUTOFF,
-            string: stateString(VIR_DOMAIN_SHUTOFF),
+            attrib: {
+              id: VIR_DOMAIN_SHUTOFF,
+              string: stateString(VIR_DOMAIN_SHUTOFF),
+            },
           },
         }),
     })
@@ -177,8 +187,10 @@ test("StateControl shutdown gracefully fails", async () => {
     id: -1,
     name: "test_machine",
     state: {
-      id: VIR_DOMAIN_RUNNING,
-      string: stateString(VIR_DOMAIN_RUNNING),
+      attrib: {
+        id: VIR_DOMAIN_RUNNING,
+        string: stateString(VIR_DOMAIN_RUNNING),
+      },
     },
   };
 

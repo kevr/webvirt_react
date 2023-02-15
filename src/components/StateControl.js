@@ -71,8 +71,8 @@ const StateControl = ({
     <div className={`state-control flex-display flex-col ${className}`}>
       <div className="flex"></div>
       <Loader width={140} type={loaderType} loading={isLoading}>
-        {(domain.state.string === "Shutoff" ||
-          domain.state.string === "Shutdown") && (
+        {(domain.state.attrib.string === "Shutoff" ||
+          domain.state.attrib.string === "Shutdown") && (
           <button
             className="waves-effect red lighten-2 btn"
             data-testid="start-submit"
@@ -81,7 +81,7 @@ const StateControl = ({
             {startElement}
           </button>
         )}
-        {domain.state.string === "Running" && (
+        {domain.state.attrib.string === "Running" && (
           <button
             className="waves-effect red lighten-2 btn"
             data-testid="shutdown-submit"
