@@ -16,9 +16,17 @@
 import { sortByName, getDiskSize, yesNo } from "./Util";
 
 test("sortByName", () => {
-  const array = [{ name: "a" }, { name: "b" }, { name: "a" }];
+  const array = [
+    { name: { text: "a" } },
+    { name: { text: "b" } },
+    { name: { text: "a" } },
+  ];
   array.sort(sortByName);
-  expect(array).toStrictEqual([{ name: "a" }, { name: "a" }, { name: "b" }]);
+  expect(array).toStrictEqual([
+    { name: { text: "a" } },
+    { name: { text: "a" } },
+    { name: { text: "b" } },
+  ]);
 });
 
 test("getDiskSize KB", () => {

@@ -67,7 +67,9 @@ const mockDomain = (
   stateStr = stateString(VIR_DOMAIN_RUNNING)
 ) => ({
   id: id,
-  name: name,
+  name: {
+    text: name,
+  },
   title: {
     text: title,
   },

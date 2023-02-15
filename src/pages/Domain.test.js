@@ -63,7 +63,9 @@ const mockDomainInterface = (name, type, address) => ({
 
 const mockDomainJson = (name, title, id, stateId) => ({
   id: id,
-  name: name,
+  name: {
+    text: name,
+  },
   uuid: {
     text: "1234-abcd",
   },

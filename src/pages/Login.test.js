@@ -20,6 +20,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { createStore } from "../store";
 import { appRoutes } from "../Routing";
+import { VIR_DOMAIN_RUNNING, stateString } from "../API";
 
 let queryClient = new QueryClient();
 
@@ -62,10 +63,17 @@ test("Login page navigates to / on login", async () => {
   const good = [
     {
       id: 1,
-      name: "test_machine",
+      name: {
+        text: "test_machine",
+      },
+      title: {
+        text: "",
+      },
       state: {
-        id: 1,
-        string: "Running",
+        attrib: {
+          id: VIR_DOMAIN_RUNNING,
+          string: stateString(VIR_DOMAIN_RUNNING),
+        },
       },
     },
   ];
@@ -84,13 +92,13 @@ test("Login page navigates to / on login", async () => {
     .mockReturnValueOnce(
       Promise.resolve({
         status: 200,
-        json: () => good,
+        json: () => Promise.resolve(good),
       })
     )
     .mockReturnValueOnce(
       Promise.resolve({
         status: 200,
-        json: () => good,
+        json: () => Promise.resolve(good),
       })
     );
 
