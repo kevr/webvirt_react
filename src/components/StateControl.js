@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { apiRequest } from "../API";
 import { setVirtDomain } from "../store/Actions";
 import Loader from "./Loader";
+import { AttributeProxy } from "../store/Proxy";
 
 const StateControl = ({
   loaderType,
@@ -41,7 +42,13 @@ const StateControl = ({
     apiRequest(`domains/${domain.name.text}/start`, "POST", session)
       .then((json) => {
         console.log(json);
-        dispatch(setVirtDomain(Object.assign({}, domain, json)));
+        dispatch(
+          setVirtDomain(
+            Object.assign({}, domain, json, {
+              os: AttributeProxy(),
+            })
+          )
+        );
         onStart();
         setLoading(false);
       })
