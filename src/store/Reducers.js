@@ -47,6 +47,12 @@ const defaultVirtState = { domains: DomainsProxy() };
 // An object form of DomainProxy: we must be able to use DomainProxy
 // as an object to be stored in Redux alongside the real domain data
 // to allow for seamless attributes.
+const defaultOSState = {
+  type: AttributeProxy(),
+  boot: AttributeProxy(),
+  bootmenu: AttributeProxy(),
+};
+
 const defaultDomainState = {
   attrib: {},
   uuid: AttributeProxy(),
@@ -57,32 +63,42 @@ const defaultDomainState = {
     interface: [],
     emulator: {},
   },
-  os: AttributeProxy(),
+  os: defaultOSState,
 };
 
 export const virtReducer = (state = defaultVirtState, action) => {
   switch (action.type) {
     case SET_VIRT_DOMAIN:
-      const o = Object.assign({}, state, {
-        domains: Object.assign({}, state.domains, {
-          [action.domain.name.text]: Object.assign(
-            {},
-            state.domains[action.domain.name.text],
-            action.domain
-          ),
-        }),
+      const updatedDomain = Object.assign(
+        {},
+        state.domains[action.domain.name.text],
+        action.domain,
+        {
+          os: Object.assign({}, defaultOSState, action.domain.os),
+        }
+      );
+
+      const updatedDomains = Object.assign({}, state.domains, {
+        [action.domain.name.text]: updatedDomain,
       });
-      console.log("Reduced");
-      console.log(o);
-      return o;
+
+      return Object.assign({}, state, { domains: updatedDomains });
+
     case SET_VIRT_DOMAINS:
+      // Assign given domains over defaultDomainState, which contains
+      // AttributeProxy objects for various fields.
       const domains = action.domains.map((domain) => {
         return Object.assign({}, defaultDomainState, domain);
       });
+
+      // Map each domain into an object with key = domain name
+      // and value = domain object
       const object = {};
       domains.forEach((domain, index) => {
         object[domain.name.text] = domain;
       });
+
+      // Return the domain name -> object association
       return Object.assign({}, state, { domains: object });
     default:
       return state;
