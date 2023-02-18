@@ -21,6 +21,24 @@ import { setVirtDomain } from "../store/Actions";
 import Loader from "./Loader";
 import { AttributeProxy } from "../store/Proxy";
 
+const updateVirtDomain = (dispatch, domain, data, callback, setLoading) => {
+  dispatch(
+    setVirtDomain(
+      Object.assign({}, domain, data, {
+        os: AttributeProxy(),
+      })
+    )
+  );
+
+  callback();
+  setLoading(false);
+};
+
+const setError = (error, setLoading) => {
+  console.error(error);
+  setLoading(false);
+};
+
 const StateControl = ({
   loaderType,
   domain,
@@ -40,22 +58,10 @@ const StateControl = ({
 
     setLoading(true);
     apiRequest(`domains/${domain.name.text}/start`, "POST", session)
-      .then((json) => {
-        console.log(json);
-        dispatch(
-          setVirtDomain(
-            Object.assign({}, domain, json, {
-              os: AttributeProxy(),
-            })
-          )
-        );
-        onStart();
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error(error);
-        setLoading(false);
-      });
+      .then((data) =>
+        updateVirtDomain(dispatch, domain, data, onStart, setLoading)
+      )
+      .catch((error) => setError(error, setLoading));
   };
 
   const onShutdown_ = (event) => {
@@ -63,15 +69,10 @@ const StateControl = ({
 
     setLoading(true);
     apiRequest(`domains/${domain.name.text}/shutdown`, "POST", session)
-      .then((json) => {
-        dispatch(setVirtDomain(Object.assign({}, domain, json)));
-        onShutdown();
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error(error);
-        setLoading(false);
-      });
+      .then((data) =>
+        updateVirtDomain(dispatch, domain, data, onShutdown, setLoading)
+      )
+      .catch((error) => setError(error, setLoading));
   };
 
   return (
