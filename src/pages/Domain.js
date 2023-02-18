@@ -51,8 +51,6 @@ const Domain = () => {
       if (!isError) {
         setLoaded(true);
         dispatch(setVirtDomain(data));
-      } else {
-        navigate("/");
       }
     }
   }, [isLoaded, title, name, dispatch, navigate, data, isLoading, isError]);

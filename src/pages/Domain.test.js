@@ -289,40 +289,22 @@ test("Domain options can be changed", async () => {
   expect(checkbox.checked).toEqual(true);
 });
 
-test("Domain gracefully navigates to /", async () => {
-  fetch
-    .mockReturnValueOnce(
-      // Mock /domains/test/ query response
-      Promise.resolve({
-        status: 404,
-        json: () =>
-          Promise.resolve({
-            detail: "Domain does not exist",
-          }),
-      })
-    )
-    .mockReturnValueOnce(
-      // Mock /auth/refresh/ query response
-      Promise.resolve({
-        status: 200,
-        json: () =>
-          Promise.resolve({
-            user: "test",
-            access: "new_access_token",
-            refresh: "new_refresh_token",
-          }),
-      })
-    )
-    .mockReturnValueOnce(
-      // Mock /domains/ query response
-      Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve([]),
-      })
-    );
+test("Domain handles API error", async () => {
+  fetch.mockReturnValueOnce(
+    // Mock /domains/test/ query response
+    Promise.resolve({
+      status: 404,
+      json: () =>
+        Promise.resolve({
+          detail: "Domain does not exist",
+        }),
+    })
+  );
 
   await renderDomain();
 
-  expect(fetch).toBeCalledTimes(4);
-  expect(router.state.location.pathname).toBe("/");
+  expect(fetch).toBeCalledTimes(2);
+
+  const error = screen.getByTestId("error");
+  expect(error).toBeInTheDocument();
 });

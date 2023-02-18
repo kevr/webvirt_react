@@ -14,6 +14,7 @@
  * permissions and limitations under the License.
  */
 import PropTypes from "prop-types";
+import FlexCentered from "./FlexCentered";
 
 const Error = ({ inline, enabled, error, children }) => {
   if (!enabled) {
@@ -21,16 +22,18 @@ const Error = ({ inline, enabled, error, children }) => {
   }
 
   return (
-    <div className="red-text text-lighten-1 text-center">
-      {!inline && (
-        <div>
-          <i className="material-icons medium">error</i>
+    <FlexCentered>
+      <div className="red-text text-lighten-1 text-center">
+        {!inline && (
+          <div>
+            <i className="material-icons medium">error</i>
+          </div>
+        )}
+        <div className="error" data-testid="error">
+          {error.data.detail}
         </div>
-      )}
-      <div className="error" data-testid="error">
-        {error.data.detail}
       </div>
-    </div>
+    </FlexCentered>
   );
 };
 
